@@ -31,7 +31,7 @@
     "framer-motion": "^11.2.6",
     "ioredis": "^5.4.1",
     "lodash": "^4.17.21",
-    "lucide-react": "^0.396.0",
+    "lucide-react": "^0.399.0",
     "marked": "^13.0.0",
     "media-icons": "^1.1.4",
     "mongodb": "^6.7.0",
