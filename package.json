@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@auth/mongodb-adapter": "^3.2.0",
-    "@builder.io/react-hydration-overlay": "^0.0.8",
+    "@builder.io/react-hydration-overlay": "^0.1.0",
     "@ducanh2912/next-pwa": "^10.2.7",
     "@nextui-org/react": "^2.3.6",
     "@radix-ui/react-dialog": "^1.0.5",
