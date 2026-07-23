@@ -8,8 +8,8 @@ import {
   getAllTimePopularMovies,
 } from '@/lib/anime';
 import { ReturnData } from '@/types/animeData';
-import dynamic from 'next/dynamic';
 import { Metadata } from 'next';
+import HomeComp from './home';
 
 export const generateMetadata = async (): Promise<Metadata> => {
   const trending = (await getTrendingAnime(1, 5)) as ReturnData;
@@ -24,8 +24,6 @@ export const generateMetadata = async (): Promise<Metadata> => {
     description: `Watch ${trendingTitles.join(', ')} on Elyzen!`,
   };
 };
-
-const HomeComp = dynamic(() => import('./home'), { ssr: false });
 
 export const revalidate = 3600;
 

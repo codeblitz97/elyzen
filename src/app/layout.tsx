@@ -6,12 +6,6 @@ import { Overpass } from 'next/font/google';
 import { Providers } from './providers';
 import Footer from '@/components/Footer';
 import Changelogs from '@/components/Changelogs';
-import { HydrationOverlay } from '@builder.io/react-hydration-overlay';
-import { AuthProvider } from '@/components/session-provider';
-import { getAuthSession } from './api/auth/[...nextauth]/route';
-import { use } from 'react';
-import dynamic from 'next/dynamic';
-const NavBar = dynamic(() => import('@/components/NavBar'), { ssr: false });
 
 const overPass = Overpass({
   subsets: ['latin', 'latin-ext', 'cyrillic', 'cyrillic-ext', 'vietnamese'],
@@ -122,12 +116,11 @@ export const viewport: Viewport = {
   themeColor: '#ffffff',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = use(getAuthSession());
   return (
     <html lang='en' suppressHydrationWarning>
       <body
@@ -136,8 +129,6 @@ export default function RootLayout({
           overPass.className
         }
       >
-        <HydrationOverlay>
-          <AuthProvider session={session}>
             <ThemeProvider
               attribute='class'
               defaultTheme='system'
@@ -145,15 +136,12 @@ export default function RootLayout({
               disableTransitionOnChange
             >
               <Providers>
-                <NavBar session={session} />
                 <main>{children}</main>
                 <Footer />
                 <Changelogs />
               </Providers>
             </ThemeProvider>
-          </AuthProvider>
           <TopProgressBar />
-        </HydrationOverlay>
       </body>
     </html>
   );
