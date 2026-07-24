@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { Overpass } from 'next/font/google';
 import { Providers } from './providers';
-import Footer from '@/components/footer';
 
 const overPass = Overpass({
   subsets: ['latin', 'latin-ext', 'cyrillic', 'cyrillic-ext', 'vietnamese'],
@@ -128,7 +127,6 @@ export default async function RootLayout({
       >
         <Providers>
           <main>{children}</main>
-          <Footer />
         </Providers>
       </body>
     </html>

@@ -1,12 +1,6 @@
-import dynamic from 'next/dynamic';
-const SideBar = dynamic(() => import('@/components/sidebar'), { ssr: false });
-
 const DMCA = () => {
   return (
     <>
-      <div className='absolute top-0'>
-        <SideBar />
-      </div>
       <div className='mx-auto max-w-2xl px-4 py-20'>
         <h1 className='mb-4 text-4xl font-bold'>DMCA NOTE</h1>
         <p className='text-primary-200 mb-56 text-lg'>

@@ -1,12 +1,6 @@
-import dynamic from 'next/dynamic';
-const SideBar = dynamic(() => import('@/components/sidebar'), { ssr: false });
-
 const Terms = () => {
   return (
     <>
-      <div className='absolute top-0'>
-        <SideBar />
-      </div>
       <div className='mx-auto max-w-3xl px-4 py-20'>
         <h1 className='mb-4 text-4xl font-bold'>TERMS OF SERVICE</h1>
         <h1 className='mb-4 text-xl'>Last updated: 05/06/2024</h1>
