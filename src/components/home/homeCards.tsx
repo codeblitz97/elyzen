@@ -5,7 +5,7 @@ import {
   ReturnData,
   SeasonalMedia,
   UpcomingSeasonalReturnData,
-} from '@/types/animeData';
+} from '@/types/anime-data';
 import { Card } from '../shared/Card';
 import {
   Carousel,

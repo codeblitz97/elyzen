@@ -1,6 +1,6 @@
 'use client';
 
-import { Result, SeasonalMedia } from '@/types/animeData';
+import { Result, SeasonalMedia } from '@/types/anime-data';
 import { Image, Link, Tooltip } from '@nextui-org/react';
 import { motion } from 'framer-motion';
 import Badge from '../ui/badge';

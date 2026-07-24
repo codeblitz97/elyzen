@@ -3,7 +3,7 @@
 import { Tooltip, Link, Image } from '@nextui-org/react';
 import Badge from '../ui/badge';
 import NextLink from 'next/link';
-import { Result, SeasonalMedia } from '@/types/animeData';
+import { Result, SeasonalMedia } from '@/types/anime-data';
 import { Smile, Meh, Frown } from 'lucide-react';
 import { getBrightnessScore } from '@/lib/utils';
 import { motion } from 'framer-motion';

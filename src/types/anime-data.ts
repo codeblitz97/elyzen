@@ -9,7 +9,7 @@ export interface PageInfo {
 export interface MediaTitle {
   userPreferred: string;
   romaji: string;
-  english: string;
+  english: string | null;
   native: string;
 }
 
@@ -27,9 +27,9 @@ export interface CoverImage {
 }
 
 export interface StartDate {
-  year: number;
-  month: number;
-  day: number;
+  year: number | null;
+  month: number | null;
+  day: number | null;
 }
 
 export interface NextAiringEpisode {
@@ -48,7 +48,7 @@ export interface Media {
   description: string;
   format: string;
   bannerImage: string;
-  coverImage: CoverImage;
+  coverImage: CoverImage | null;
   episodes: number;
   meanScore: number;
   duration: number;
@@ -82,19 +82,19 @@ export interface Result {
   id: string;
   malId: number;
   title: MediaTitle;
-  coverImage: string;
+  coverImage: string | null;
   trailer: string | null;
   description: string;
   status: string;
-  bannerImage: string;
-  rating: number;
-  meanScore: number;
+  bannerImage: string | null;
+  rating: number | null;
+  meanScore: number | null;
   releaseDate: number;
   startDate: StartDate;
   color: string | null;
   genres: string[];
   totalEpisodes: number;
-  duration: number;
+  duration: number | null;
   format: string;
   type: string;
   year: number;
@@ -144,7 +144,7 @@ export interface SeasonalMedia {
   id: string;
   malId: number;
   title: MediaTitle;
-  coverImage: string;
+  coverImage: string | null;
   color: string | null;
   genres: string[];
   year: number;

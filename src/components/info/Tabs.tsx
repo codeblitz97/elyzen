@@ -5,7 +5,7 @@ import { Provider } from '@/types/api';
 import AnimeViewer from '../shared/EpisodeList';
 import { Card } from '../shared/Card';
 import { Tabs as UITabs, Tab, Image, Link } from '@nextui-org/react';
-import { SeasonalMedia } from '@/types/animeData';
+import { SeasonalMedia } from '@/types/anime-data';
 import { motion, AnimatePresence } from 'framer-motion';
 import React, { useState } from 'react';
 import {
