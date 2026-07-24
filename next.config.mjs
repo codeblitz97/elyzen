@@ -65,6 +65,6 @@ const nextConfig = {
   },
 };
 
-const combinedConfig = (nextConfig);
+const combinedConfig = nextConfig;
 
 export default combinedConfig;

@@ -171,7 +171,7 @@ export default function SideBar() {
           </div>
         </div>
       ) : (
-        <div className='fixed left-2 top-12 z-[999999]'>
+        <div className='fixed top-12 left-2 z-[999999]'>
           <Drawer>
             <DrawerTrigger asChild>
               <Button variant={'light'} isIconOnly radius='full'>

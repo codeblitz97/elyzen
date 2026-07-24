@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from "next/server";
-import ky, { type KyInstance, HTTPError } from "ky";
-import * as v from "valibot";
+import { NextRequest, NextResponse } from 'next/server';
+import ky, { type KyInstance, HTTPError } from 'ky';
+import * as v from 'valibot';
 
-const API_URL = "https://scrape-api-ten.vercel.app/api";
+const API_URL = 'https://scrape-api-ten.vercel.app/api';
 
 const animepahe = ky.create({ prefix: `${API_URL}/animepahe` });
 const senshi = ky.create({ prefix: `${API_URL}/senshi` });
@@ -12,31 +12,31 @@ const anizone = ky.create({ prefix: `${API_URL}/anizone` });
 const watchanimeworld = ky.create({ prefix: `${API_URL}/watchanimeworld` });
 
 const providers: { name: string; client: KyInstance }[] = [
-  { name: "animepahe", client: animepahe },
-  { name: "senshi", client: senshi },
-  { name: "anineko", client: anineko },
-  { name: "animegg", client: animegg },
-  { name: "watchanimeworld", client: watchanimeworld },
-  { name: "anizone", client: anizone },
+  { name: 'animepahe', client: animepahe },
+  { name: 'senshi', client: senshi },
+  { name: 'anineko', client: anineko },
+  { name: 'animegg', client: animegg },
+  { name: 'watchanimeworld', client: watchanimeworld },
+  { name: 'anizone', client: anizone },
 ];
 
 const providerNames = providers.map((p) => p.name) as [string, ...string[]];
 
 // Validates route params (from the dynamic segments)
 const ParamsSchema = v.object({
-  id: v.pipe(v.string(), v.trim(), v.minLength(1, "id is required")),
+  id: v.pipe(v.string(), v.trim(), v.minLength(1, 'id is required')),
   episodeId: v.pipe(
     v.string(),
     v.trim(),
-    v.minLength(1, "episodeId is required")
+    v.minLength(1, 'episodeId is required')
   ),
-  number: v.pipe(v.string(), v.trim(), v.minLength(1, "number is required")),
+  number: v.pipe(v.string(), v.trim(), v.minLength(1, 'number is required')),
 });
 
 const QuerySchema = v.object({
   provider: v.picklist(
     providerNames,
-    `Invalid provider. Valid providers: ${providerNames.join(", ")}`
+    `Invalid provider. Valid providers: ${providerNames.join(', ')}`
   ),
 });
 
@@ -72,7 +72,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
   if (!paramsResult.success) {
     return NextResponse.json(
       {
-        error: "Invalid route params",
+        error: 'Invalid route params',
         issues: v.flatten(paramsResult.issues).nested,
       },
       { status: 400 }
@@ -80,12 +80,12 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
   }
 
   const queryResult = v.safeParse(QuerySchema, {
-    provider: searchParams.get("provider") ?? undefined,
+    provider: searchParams.get('provider') ?? undefined,
   });
   if (!queryResult.success) {
     return NextResponse.json(
       {
-        error: "Invalid query params",
+        error: 'Invalid query params',
         issues: v.flatten(queryResult.issues).nested,
       },
       { status: 400 }
@@ -99,7 +99,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 
   try {
     const data = await providerEntry.client
-      .get("sources", {
+      .get('sources', {
         searchParams: {
           id: episodeId,
           number,
@@ -143,7 +143,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
     );
 
     return NextResponse.json(
-      { error: "Failed to fetch sources", provider: providerEntry.name },
+      { error: 'Failed to fetch sources', provider: providerEntry.name },
       { status: 502 }
     );
   }

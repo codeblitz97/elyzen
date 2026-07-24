@@ -97,7 +97,7 @@ export const ColumnCard = ({
               }
             >
               <Link
-                className='flex-1 rounded-xl bg-slate-200 text-foreground dark:bg-neutral-800'
+                className='text-foreground flex-1 rounded-xl bg-slate-200 dark:bg-neutral-800'
                 href={`/info/${anime.id}`}
               >
                 <div className='flex w-full items-center justify-between'>
@@ -108,7 +108,7 @@ export const ColumnCard = ({
                         alt={anime.title.english! ?? anime.title.romaji!}
                         radius='none'
                         isBlurred
-                        className='max-h-[62px] min-h-[62px] min-w-[50px] max-w-[50px] object-cover'
+                        className='max-h-[62px] min-h-[62px] max-w-[50px] min-w-[50px] object-cover'
                         width={50}
                         height={62}
                       />

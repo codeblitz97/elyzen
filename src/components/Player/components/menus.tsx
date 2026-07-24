@@ -375,7 +375,7 @@ export interface RadioProps extends Menu.RadioProps {}
 function Radio({ children, ...props }: RadioProps) {
   return (
     <Menu.Radio
-      className='ring-media-focus group relative flex w-full cursor-pointer select-none items-center justify-start rounded-sm p-2.5 outline-none data-[hocus]:bg-white/10 data-[focus]:ring-[3px]'
+      className='ring-media-focus group relative flex w-full cursor-pointer items-center justify-start rounded-sm p-2.5 outline-none select-none data-[focus]:ring-[3px] data-[hocus]:bg-white/10'
       {...props}
     >
       <RadioButtonIcon className='h-4 w-4 text-white group-data-[checked]:hidden' />
@@ -424,10 +424,10 @@ function SubmenuButton({
   ];
   return (
     <Menu.Button
-      className={`ring-media-focus parent left-0 z-10 flex w-full cursor-pointer select-none items-center justify-start rounded-sm p-2.5 outline-none ring-inset data-[open]:sticky data-[open]:-top-2.5 data-[hocus]:bg-white/10 data-[open]:${r ? r : 'bg-primary'} data-[focus]:ring-[3px]`}
+      className={`ring-media-focus parent left-0 z-10 flex w-full cursor-pointer items-center justify-start rounded-sm p-2.5 outline-none select-none ring-inset data-[hocus]:bg-white/10 data-[open]:sticky data-[open]:-top-2.5 data-[open]:${r ? r : 'bg-primary'} data-[focus]:ring-[3px]`}
       disabled={disabled}
     >
-      <ChevronLeftIcon className='parent-data-[open]:block -ml-0.5 mr-1.5 hidden h-[18px] w-[18px]' />
+      <ChevronLeftIcon className='parent-data-[open]:block mr-1.5 -ml-0.5 hidden h-[18px] w-[18px]' />
       <div className='parent-data-[open]:hidden contents'>
         <Icon className='h-5 w-5' />
       </div>
@@ -437,4 +437,3 @@ function SubmenuButton({
     </Menu.Button>
   );
 }
-

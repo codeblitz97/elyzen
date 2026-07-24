@@ -73,13 +73,13 @@ export const Hero = ({ data }: { data: ReturnData }) => {
             alt={randomElement?.title?.english ?? randomElement?.title.romaji}
             width={1920}
             height={920}
-            className='aspect-video max-h-[300px] min-w-[500px] overflow-hidden rounded-lg object-cover md:max-h-[350px] md:min-w-[1000px] lg:max-h-[600px] lg:min-w-[2000px] lg:max-w-[2000px]'
+            className='aspect-video max-h-[300px] min-w-[500px] overflow-hidden rounded-lg object-cover md:max-h-[350px] md:min-w-[1000px] lg:max-h-[600px] lg:max-w-[2000px] lg:min-w-[2000px]'
           />
         )}
-        <div className='absolute inset-0 bg-gradient-to-r from-transparent from-[80%] to-background'></div>
-        <div className='absolute inset-0 bg-gradient-to-l from-transparent from-[80%] to-background'></div>
-        <div className='absolute inset-0 bg-gradient-to-t from-transparent from-[80%] to-background'></div>
-        <div className='absolute inset-0 bg-gradient-to-b from-transparent to-background'>
+        <div className='to-background absolute inset-0 bg-gradient-to-r from-transparent from-[80%]'></div>
+        <div className='to-background absolute inset-0 bg-gradient-to-l from-transparent from-[80%]'></div>
+        <div className='to-background absolute inset-0 bg-gradient-to-t from-transparent from-[80%]'></div>
+        <div className='to-background absolute inset-0 bg-gradient-to-b from-transparent'>
           <div className='ml-5 flex h-full flex-col justify-end gap-8'>
             <div>
               <div className='flex gap-3'>

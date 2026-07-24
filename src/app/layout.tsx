@@ -122,14 +122,14 @@ export default async function RootLayout({
     <html lang='en' suppressHydrationWarning>
       <body
         className={
-          'h-full scrollbar scrollbar-track-sky-300 scrollbar-thumb-sky-700 ' +
+          'scrollbar h-full scrollbar-thumb-sky-700 scrollbar-track-sky-300 ' +
           overPass.className
         }
       >
-              <Providers>
-                <main>{children}</main>
-                <Footer />
-              </Providers>
+        <Providers>
+          <main>{children}</main>
+          <Footer />
+        </Providers>
       </body>
     </html>
   );

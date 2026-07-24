@@ -101,7 +101,7 @@ export const Card = ({ anime }: Readonly<CardProps>) => {
                 radius='sm'
                 isBlurred
                 src={anime.coverImage}
-                className='max-h-[185px] min-h-[185px] min-w-[125px] max-w-[125px] object-cover md:max-h-[265px] md:min-h-[265px] md:min-w-[185px] md:max-w-[185px] lg:max-h-[265px] lg:min-h-[265px] lg:min-w-[185px] lg:max-w-[185px] xl:max-h-[265px] xl:min-h-[265px] xl:min-w-[185px] xl:max-w-[185px]'
+                className='max-h-[185px] min-h-[185px] max-w-[125px] min-w-[125px] object-cover md:max-h-[265px] md:min-h-[265px] md:max-w-[185px] md:min-w-[185px] lg:max-h-[265px] lg:min-h-[265px] lg:max-w-[185px] lg:min-w-[185px] xl:max-h-[265px] xl:min-h-[265px] xl:max-w-[185px] xl:min-w-[185px]'
               />
               <motion.p
                 className='max-w-[185px] text-gray-900 dark:text-gray-300'

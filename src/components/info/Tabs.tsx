@@ -32,7 +32,7 @@ export default function Tabs({
 
   return (
     <>
-      <div className='min-w-full overflow-hidden scrollbar-hide'>
+      <div className='scrollbar-hide min-w-full overflow-hidden'>
         <UITabs variant={'underlined'} aria-label='Information'>
           <Tab key='episodes' title='Episodes'>
             <AnimeViewer animeData={episodes} info={info} id={id} />
@@ -74,7 +74,7 @@ export default function Tabs({
                               initial={{ opacity: 0 }}
                               animate={{ opacity: 1 }}
                               exit={{ opacity: 0 }}
-                              className='absolute left-0 top-0 h-full w-full'
+                              className='absolute top-0 left-0 h-full w-full'
                             >
                               <Image
                                 src={character.voiceActors[0].image.large}
@@ -83,7 +83,7 @@ export default function Tabs({
                                 height={200}
                                 className='object-cover'
                               />
-                              <div className='absolute bottom-0 left-0 z-50 w-full bg-black bg-opacity-50 text-center text-white'>
+                              <div className='bg-opacity-50 absolute bottom-0 left-0 z-50 w-full bg-black text-center text-white'>
                                 {character.voiceActors[0].name.full}
                               </div>
                             </motion.div>
@@ -92,7 +92,7 @@ export default function Tabs({
                               initial={{ opacity: 0 }}
                               animate={{ opacity: 1 }}
                               exit={{ opacity: 0 }}
-                              className='absolute left-0 top-0 h-full w-full'
+                              className='absolute top-0 left-0 h-full w-full'
                             >
                               <Image
                                 src={character.node.image.large}
@@ -101,7 +101,7 @@ export default function Tabs({
                                 height={200}
                                 className='object-cover'
                               />
-                              <div className='absolute bottom-0 left-0 z-50 w-full bg-black bg-opacity-50 text-center text-white'>
+                              <div className='bg-opacity-50 absolute bottom-0 left-0 z-50 w-full bg-black text-center text-white'>
                                 {character.node.name.full}
                               </div>
                             </motion.div>

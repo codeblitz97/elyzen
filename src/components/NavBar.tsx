@@ -115,7 +115,7 @@ export default function NavBar({ session }: { session: Session | null }) {
               />
               <div className='mt-10'>
                 {searchResults && !('message' in searchResults) && (
-                  <div className='max-h-[250px] overflow-y-scroll scrollbar-hide'>
+                  <div className='scrollbar-hide max-h-[250px] overflow-y-scroll'>
                     {searchResults.results
                       .filter(
                         (s) =>

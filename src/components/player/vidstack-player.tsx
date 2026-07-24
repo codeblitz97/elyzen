@@ -387,7 +387,7 @@ export default function Player({
             {showButton && openingButton && (
               <button
                 onClick={handleOpening}
-                className='font-inter animate-show absolute bottom-[70px] left-4 z-[40] flex cursor-pointer items-center gap-2 rounded-lg border border-solid border-white border-opacity-10 bg-black bg-opacity-80 px-3 py-2 text-left text-base font-medium text-white sm:bottom-[83px]'
+                className='font-inter animate-show border-opacity-10 bg-opacity-80 absolute bottom-[70px] left-4 z-[40] flex cursor-pointer items-center gap-2 rounded-lg border border-solid border-white bg-black px-3 py-2 text-left text-base font-medium text-white sm:bottom-[83px]'
               >
                 Skip Opening
               </button>
@@ -395,7 +395,7 @@ export default function Player({
             {showButton && endingButton && (
               <button
                 onClick={handleEnding}
-                className='font-inter animate-show absolute bottom-[70px] left-4 z-[40] flex cursor-pointer items-center gap-2 rounded-lg border border-solid border-white border-opacity-10 bg-black bg-opacity-80 px-3 py-2 text-left text-base font-medium text-white sm:bottom-[83px]'
+                className='font-inter animate-show border-opacity-10 bg-opacity-80 absolute bottom-[70px] left-4 z-[40] flex cursor-pointer items-center gap-2 rounded-lg border border-solid border-white bg-black px-3 py-2 text-left text-base font-medium text-white sm:bottom-[83px]'
               >
                 Skip Ending
               </button>
@@ -473,7 +473,7 @@ export default function Player({
           {showButton && openingButton && (
             <button
               onClick={handleOpening}
-              className='font-inter animate-show absolute bottom-[70px] left-4 z-[40] flex cursor-pointer items-center gap-2 rounded-lg border border-solid border-white border-opacity-10 bg-black bg-opacity-80 px-3 py-2 text-left text-base font-medium text-white sm:bottom-[83px]'
+              className='font-inter animate-show border-opacity-10 bg-opacity-80 absolute bottom-[70px] left-4 z-[40] flex cursor-pointer items-center gap-2 rounded-lg border border-solid border-white bg-black px-3 py-2 text-left text-base font-medium text-white sm:bottom-[83px]'
             >
               Skip Opening
             </button>
@@ -481,7 +481,7 @@ export default function Player({
           {showButton && endingButton && (
             <button
               onClick={handleEnding}
-              className='font-inter animate-show absolute bottom-[70px] left-4 z-[40] flex cursor-pointer items-center gap-2 rounded-lg border border-solid border-white border-opacity-10 bg-black bg-opacity-80 px-3 py-2 text-left text-base font-medium text-white sm:bottom-[83px]'
+              className='font-inter animate-show border-opacity-10 bg-opacity-80 absolute bottom-[70px] left-4 z-[40] flex cursor-pointer items-center gap-2 rounded-lg border border-solid border-white bg-black px-3 py-2 text-left text-base font-medium text-white sm:bottom-[83px]'
             >
               Skip Ending
             </button>
@@ -511,4 +511,3 @@ export default function Player({
     </div>
   );
 }
-

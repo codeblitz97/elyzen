@@ -18,7 +18,7 @@ export function VideoLayout({ thumbnails }: VideoLayoutProps) {
     <>
       <Gestures />
       <Captions
-        className={`vds-captions media-preview:opacity-0 media-controls:bottom-[85px] media-captions:opacity-100 absolute inset-0 bottom-2 z-10 select-none break-words rounded-lg transition-[opacity,bottom] duration-300`}
+        className={`vds-captions media-preview:opacity-0 media-controls:bottom-[85px] media-captions:opacity-100 absolute inset-0 bottom-2 z-10 rounded-lg break-words transition-[opacity,bottom] duration-300 select-none`}
       />
       <Controls.Root
         className={`${styles.controls} media-controls:opacity-100 absolute inset-0 z-10 flex h-full w-full flex-col bg-gradient-to-t from-black/10 to-transparent opacity-0 transition-opacity`}
@@ -59,16 +59,15 @@ function Gestures() {
         action='toggle:fullscreen'
       />
       <Gesture
-        className='absolute left-0 top-0 z-10 block h-full w-1/5'
+        className='absolute top-0 left-0 z-10 block h-full w-1/5'
         event='dblpointerup'
         action='seek:-10'
       />
       <Gesture
-        className='absolute right-0 top-0 z-10 block h-full w-1/5'
+        className='absolute top-0 right-0 z-10 block h-full w-1/5'
         event='dblpointerup'
         action='seek:10'
       />
     </>
   );
 }
-

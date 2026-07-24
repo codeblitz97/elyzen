@@ -23,11 +23,11 @@ export default function Profile() {
 
   return (
     <>
-      <div className='absolute top-0 h-screen w-[50px] bg-background'>
+      <div className='bg-background absolute top-0 h-screen w-[50px]'>
         <SideBar />
       </div>
 
-      <div className='min-h-screen overflow-x-hidden bg-background text-foreground'>
+      <div className='bg-background text-foreground min-h-screen overflow-x-hidden'>
         {user?.bannerImage ? (
           <Image
             radius='none'
@@ -46,13 +46,13 @@ export default function Profile() {
             <img
               src={profilePicture}
               alt={`Profile picture of ${user?.name}`}
-              className='-mt-16 h-32 w-32 rounded-full border-4 border-white dark:border-gray-900 sm:h-40 sm:w-40 md:h-48 md:w-48'
+              className='-mt-16 h-32 w-32 rounded-full border-4 border-white sm:h-40 sm:w-40 md:h-48 md:w-48 dark:border-gray-900'
             />
           )}
           <h1 className='mt-4 text-2xl font-semibold sm:text-3xl md:text-4xl'>
             {user?.name}
           </h1>
-          <p className='mt-2 text-sm text-gray-600 dark:text-gray-400 sm:text-base md:text-lg'>
+          <p className='mt-2 text-sm text-gray-600 sm:text-base md:text-lg dark:text-gray-400'>
             Joined {getRelativeTime(user?.createdAt!)}
           </p>
         </div>

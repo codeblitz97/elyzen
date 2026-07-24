@@ -60,7 +60,7 @@ const AnimeList = () => {
               </Button>
             </Tooltip>
           </div>
-          <div className='max-h-[400px] overflow-x-hidden overflow-y-scroll scrollbar-hide'>
+          <div className='scrollbar-hide max-h-[400px] overflow-x-hidden overflow-y-scroll'>
             <div className='grid grid-cols-1 p-4 lg:grid-cols-3'>
               {episodes?.map((episode) => (
                 <Link
@@ -73,7 +73,7 @@ const AnimeList = () => {
                       <Image
                         src={episode.image}
                         alt={episode.eptitle}
-                        className='max-h-[205px] min-h-[205px] min-w-[365px] max-w-[365px] rounded-lg object-cover'
+                        className='max-h-[205px] min-h-[205px] max-w-[365px] min-w-[365px] rounded-lg object-cover'
                       />
                     )}
                     <h2 className='mt-2 text-lg font-semibold'>

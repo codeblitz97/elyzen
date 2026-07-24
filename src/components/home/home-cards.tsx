@@ -21,8 +21,7 @@ type CardProps = {
 
 export const HomeCards = ({ animeData }: Readonly<CardProps>) => {
   const slicedAnimeArray = animeData.results.slice(0, 15) as
-    | Result[]
-    | SeasonalMedia[];
+    Result[] | SeasonalMedia[];
 
   return (
     <>

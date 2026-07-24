@@ -3,9 +3,9 @@ import { formatDistanceToNow, parseISO } from 'date-fns';
 import { getInfo } from '@/lib/info';
 import { NextRequest, NextResponse } from 'next/server';
 import { cache } from '@/lib/cache';
-import * as v from "valibot";
+import * as v from 'valibot';
 
-const API_URL = "https://scrape-api-ten.vercel.app/api"
+const API_URL = 'https://scrape-api-ten.vercel.app/api';
 
 const animepahe = ky.create({ prefix: `${API_URL}/animepahe` });
 const senshi = ky.create({ prefix: `${API_URL}/senshi` });
@@ -20,7 +20,7 @@ const providers: { name: string; client: KyInstance }[] = [
   { name: 'anineko', client: anineko },
   { name: 'animegg', client: animegg },
   { name: 'watchanimeworld', client: watchanimeworld },
-    { name: 'anizone', client: anizone },
+  { name: 'anizone', client: anizone },
 ];
 
 const providerClientMap = new Map<string, KyInstance>(
@@ -103,13 +103,11 @@ export interface EpisodeReturnType {
   };
 }
 
-type AnizipEpisode = Omit<EpisodeReturn, "isFiller" | "id">
-
+type AnizipEpisode = Omit<EpisodeReturn, 'isFiller' | 'id'>;
 
 function levenshtein(a: string, b: string): number {
-  const matrix: number[][] = Array.from(
-    { length: a.length + 1 },
-    () => new Array<number>(b.length + 1).fill(0)
+  const matrix: number[][] = Array.from({ length: a.length + 1 }, () =>
+    new Array<number>(b.length + 1).fill(0)
   );
 
   for (let i = 0; i <= a.length; i++) matrix[i][0] = i;
@@ -119,8 +117,8 @@ function levenshtein(a: string, b: string): number {
     for (let j = 1; j <= b.length; j++) {
       const cost = a[i - 1] === b[j - 1] ? 0 : 1;
       matrix[i][j] = Math.min(
-        matrix[i - 1][j] + 1,     // deletion
-        matrix[i][j - 1] + 1,     // insertion
+        matrix[i - 1][j] + 1, // deletion
+        matrix[i][j - 1] + 1, // insertion
         matrix[i - 1][j - 1] + cost // substitution
       );
     }
@@ -130,7 +128,11 @@ function levenshtein(a: string, b: string): number {
 }
 
 function normalize(str: string): string {
-  return str.toLowerCase().trim().replace(/[^a-z0-9]+/g, ' ').trim();
+  return str
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim();
 }
 
 function similarityScore(a: string, b: string): number {
@@ -147,52 +149,58 @@ function similarityScore(a: string, b: string): number {
 }
 
 const ParamsSchema = v.object({
-  id: v.pipe(v.string(), v.trim(), v.minLength(1, "Missing anime id!")),
+  id: v.pipe(v.string(), v.trim(), v.minLength(1, 'Missing anime id!')),
 });
 
 const getAnizipMetadata = async (anilistId: string) => {
-  const response = await ky.get(`https://api.ani.zip/mappings?anilist_id=${anilistId}`).json<{
-    episodes: {
-      [key: string]: {
-        seasonNumber: number;
-        episodeNumber: number;
-        title: {
-          ja: string;
-          en?: string;
-          'x-jat'?: string
+  const response = await ky
+    .get(`https://api.ani.zip/mappings?anilist_id=${anilistId}`)
+    .json<{
+      episodes: {
+        [key: string]: {
+          seasonNumber: number;
+          episodeNumber: number;
+          title: {
+            ja: string;
+            en?: string;
+            'x-jat'?: string;
+          };
+          image: string;
+          overview: string;
+          summary: string;
+          airDateUtc: string;
+          rating: string;
+          episode: string;
+          runtime: number;
+          tvdbId: number;
         };
-        image: string;
-        overview: string;
-        summary: string;
-        airDateUtc: string;
-        rating: string;
-        episode: string;
-        runtime: number;
-        tvdbId: number;
-      }
-    }
-  }>();
+      };
+    }>();
 
   // ignore special episodes.
-  const episodes = Object.values(response.episodes).filter((ep) => !ep.episode.startsWith("S"));
+  const episodes = Object.values(response.episodes).filter(
+    (ep) => !ep.episode.startsWith('S')
+  );
 
   const formattedEpisodes: AnizipEpisode[] = episodes.map((episode, idx) => ({
     title: episode.title.en || episode.title['x-jat'] || episode.title.ja,
     number: idx + 1,
-    description: episode.overview || episode.summary.split("\nSource:")[0],
+    description: episode.overview || episode.summary.split('\nSource:')[0],
     thumbnail: episode.image,
-    released: formatDistanceToNow(parseISO(episode.airDateUtc), { addSuffix: true }),
+    released: formatDistanceToNow(parseISO(episode.airDateUtc), {
+      addSuffix: true,
+    }),
     season: episode.seasonNumber,
     rating: Number(episode.rating),
     tvdbId: episode.tvdbId,
     duration: episode.runtime,
     hasAired: episode.airDateUtc
-  ? new Date(episode.airDateUtc) <= new Date()
-  : false
+      ? new Date(episode.airDateUtc) <= new Date()
+      : false,
   }));
 
   return formattedEpisodes;
-}
+};
 
 async function searchAllProviders(
   titles: string[]
@@ -256,7 +264,6 @@ export async function getAllProvidersSearch(
   };
 }
 
-
 async function fetchProviderEpisodes(
   providerName: string,
   providerId: string
@@ -272,7 +279,6 @@ async function fetchProviderEpisodes(
 
   return { providerName, episodes };
 }
-
 
 async function fetchAllRawProviderEpisodes(
   searches: TitleProviderMapping
@@ -292,13 +298,23 @@ async function fetchAllRawProviderEpisodes(
     .map((outcome) => outcome.value);
 }
 
-export function getEpisodes(id: string, legacy?: true): Promise<EpisodeReturnType[]>;
-export function getEpisodes(id: string, legacy: false): Promise<UnifiedEpisode[]>;
-export async function getEpisodes(
+export function getEpisodes(
   id: string,
+  legacy?: true
+): Promise<EpisodeReturnType[]>;
+export function getEpisodes(
+  id: string,
+  legacy: false
+): Promise<UnifiedEpisode[]>;
+export async function getEpisodes(
+  id: string
 ): Promise<EpisodeReturnType[] | UnifiedEpisode[]> {
   const anilistInfo = await getInfo(Number(id));
-  const titles = [...new Set(Object.values(anilistInfo.title).filter((title) => title) as string[])];
+  const titles = [
+    ...new Set(
+      Object.values(anilistInfo.title).filter((title) => title) as string[]
+    ),
+  ];
 
   const [anizipEpisodes, searches] = await Promise.all([
     getAnizipMetadata(id).catch(() => [] as AnizipEpisode[]),
@@ -311,35 +327,35 @@ export async function getEpisodes(
 
   const rawProviderEpisodes = await fetchAllRawProviderEpisodes(searches);
 
-    const merged = new Map<number, UnifiedEpisode>();
+  const merged = new Map<number, UnifiedEpisode>();
 
-    for (const { providerName, episodes } of rawProviderEpisodes) {
-      for (const ep of episodes) {
-        const anizipEp = anizipByNumber.get(ep.number);
-        const existing = merged.get(ep.number);
+  for (const { providerName, episodes } of rawProviderEpisodes) {
+    for (const ep of episodes) {
+      const anizipEp = anizipByNumber.get(ep.number);
+      const existing = merged.get(ep.number);
 
-        if (existing) {
-          existing.providers.push({ providerName, providerId: ep.id });
-          continue;
-        }
-
-        merged.set(ep.number, {
-          title: anizipEp?.title ?? ep.title ?? `Episode ${ep.number}`,
-          description: anizipEp?.description ?? '',
-          thumbnail: anizipEp?.thumbnail ?? ep.image ?? '',
-          rating: anizipEp?.rating ?? 0,
-          season: anizipEp?.season ?? 1,
-          released: anizipEp?.released ?? '',
-          tvdbId: anizipEp?.tvdbId ?? 0,
-          duration: anizipEp?.duration ?? 0,
-          hasAired: anizipEp?.hasAired ?? false,
-          number: ep.number,
-          providers: [{ providerName, providerId: ep.id }],
-        });
+      if (existing) {
+        existing.providers.push({ providerName, providerId: ep.id });
+        continue;
       }
-    }
 
-    return Array.from(merged.values()).sort((a, b) => a.number - b.number);
+      merged.set(ep.number, {
+        title: anizipEp?.title ?? ep.title ?? `Episode ${ep.number}`,
+        description: anizipEp?.description ?? '',
+        thumbnail: anizipEp?.thumbnail ?? ep.image ?? '',
+        rating: anizipEp?.rating ?? 0,
+        season: anizipEp?.season ?? 1,
+        released: anizipEp?.released ?? '',
+        tvdbId: anizipEp?.tvdbId ?? 0,
+        duration: anizipEp?.duration ?? 0,
+        hasAired: anizipEp?.hasAired ?? false,
+        number: ep.number,
+        providers: [{ providerName, providerId: ep.id }],
+      });
+    }
+  }
+
+  return Array.from(merged.values()).sort((a, b) => a.number - b.number);
 }
 
 export async function GET(
@@ -351,7 +367,7 @@ export async function GET(
   const result = v.safeParse(ParamsSchema, rawParams);
   if (!result.success) {
     return NextResponse.json(
-      { error: v.flatten(result.issues).nested?.id?.[0] ?? "Invalid anime id" },
+      { error: v.flatten(result.issues).nested?.id?.[0] ?? 'Invalid anime id' },
       { status: 400 }
     );
   }
@@ -364,7 +380,7 @@ export async function GET(
   if (cachedData)
     return NextResponse.json(JSON.parse(cachedData), {
       headers: {
-        "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400",
+        'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400',
       },
     });
 
@@ -375,14 +391,14 @@ export async function GET(
 
     return NextResponse.json(episodes, {
       headers: {
-        "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400",
+        'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400',
       },
     });
   } catch (error) {
     console.error(`Failed to fetch episodes for ${id}:`, error);
 
     return NextResponse.json(
-      { error: "Failed to fetch episodes, oopsie!" },
+      { error: 'Failed to fetch episodes, oopsie!' },
       { status: 500 }
     );
   }

@@ -103,13 +103,17 @@ const fetchAndCache = async <TItem>(
 
   const response = await fetch(ANILIST_URL, {
     method: 'POST',
-    headers: new Headers({ 'Content-Type': 'application/json', Accept: 'application/json' }),
+    headers: new Headers({
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    }),
     body: JSON.stringify({ query, variables }),
     cache: 'no-store',
   });
   const data = (await response.json()) as AniListResponse<TItem>;
 
-  if (!data.errors) await cache.set(cacheKey, JSON.stringify(data), 5 * 60 * 60);
+  if (!data.errors)
+    await cache.set(cacheKey, JSON.stringify(data), 5 * 60 * 60);
   return data;
 };
 
@@ -160,8 +164,14 @@ const mapMediaItem = (item: AniListMedia) => ({
   id: item.id.toString(),
   malId: item.idMal,
   title: item.title,
-  coverImage: pickFirst(item.coverImage.extraLarge, item.coverImage.large, item.coverImage.medium),
-  trailer: item.trailer?.id ? `https://www.youtube.com/watch?v=${item.trailer.id}` : null,
+  coverImage: pickFirst(
+    item.coverImage.extraLarge,
+    item.coverImage.large,
+    item.coverImage.medium
+  ),
+  trailer: item.trailer?.id
+    ? `https://www.youtube.com/watch?v=${item.trailer.id}`
+    : null,
   description: item.description,
   status: item.status,
   bannerImage: pickFirst(
@@ -180,7 +190,9 @@ const mapMediaItem = (item: AniListMedia) => ({
   duration: item.duration,
   format: item.format,
   type: item.type,
-  studios: item.studios.edges.filter((edge) => edge.isMain).map((edge) => edge.node.name),
+  studios: item.studios.edges
+    .filter((edge) => edge.isMain)
+    .map((edge) => edge.node.name),
   season: item.season,
   year: item.seasonYear,
   nextAiringEpisode: item.nextAiringEpisode,
@@ -191,7 +203,9 @@ const toReturnData = (page: AniListPage<AniListMedia>): ReturnData => ({
   hasNextPage: page.pageInfo.hasNextPage,
   total: page.pageInfo.total,
   lastPage: page.pageInfo.lastPage,
-  results: page.media.filter((item) => item.status !== 'NOT_YET_RELEASED').map(mapMediaItem),
+  results: page.media
+    .filter((item) => item.status !== 'NOT_YET_RELEASED')
+    .map(mapMediaItem),
 });
 
 const runMediaQuery = async (
@@ -199,7 +213,11 @@ const runMediaQuery = async (
   variables: Record<string, unknown>
 ): Promise<ReturnData> => {
   try {
-    const response = await fetchAndCache<AniListMedia>(cacheId, MEDIA_QUERY, variables);
+    const response = await fetchAndCache<AniListMedia>(
+      cacheId,
+      MEDIA_QUERY,
+      variables
+    );
     return toReturnData(response.data.Page);
   } catch (error) {
     console.error(error);
@@ -216,7 +234,12 @@ export const getTrendingAnime = (page = 1, perPage = 24): Promise<ReturnData> =>
   });
 
 export const getAllTimePopularAnime = (): Promise<ReturnData> =>
-  runMediaQuery('allTimePopularAnime', { page: 1, size: 35, sort: ['POPULARITY_DESC'], type: 'ANIME' });
+  runMediaQuery('allTimePopularAnime', {
+    page: 1,
+    size: 35,
+    sort: ['POPULARITY_DESC'],
+    type: 'ANIME',
+  });
 
 export const getAllTimePopularMovies = (): Promise<ReturnData> =>
   runMediaQuery('allTimePopularMovies', {
@@ -237,7 +260,12 @@ export const getPopularThisSeasonAnime = (): Promise<ReturnData> =>
   });
 
 export const top100Anime = (): Promise<ReturnData> =>
-  runMediaQuery('top100Anime', { page: 1, size: 10, sort: ['SCORE_DESC'], type: 'ANIME' });
+  runMediaQuery('top100Anime', {
+    page: 1,
+    size: 10,
+    sort: ['SCORE_DESC'],
+    type: 'ANIME',
+  });
 
 export const advancedSearch = (
   sort: string[] = ['POPULARITY_DESC'],
@@ -254,7 +282,19 @@ export const advancedSearch = (
 ): Promise<ReturnData> =>
   runMediaQuery(
     `advancedSearch:${search}:${sort}:${rating}:${status}:${format}:${type}:${year}:${season}:${genres}:${page}:${perPage}`,
-    { page, size: perPage, sort, search, rating, status, format, type, seasonYear: year, season, genres }
+    {
+      page,
+      size: perPage,
+      sort,
+      search,
+      rating,
+      status,
+      format,
+      type,
+      seasonYear: year,
+      season,
+      genres,
+    }
   );
 
 interface AniListSeasonalMedia {
@@ -292,7 +332,9 @@ const UPCOMING_SEASON_QUERY = `query (
 const getNextSeasonAndYear = (): { season: string; year: number } => {
   const seasons = ['WINTER', 'SPRING', 'SUMMER', 'FALL'];
   const now = new Date();
-  const currentIndex = seasons.indexOf(getCurrentSeason(now.getMonth() + 1).toUpperCase());
+  const currentIndex = seasons.indexOf(
+    getCurrentSeason(now.getMonth() + 1).toUpperCase()
+  );
   const nextIndex = (currentIndex + 1) % 4;
   const year = nextIndex === 0 ? now.getFullYear() + 1 : now.getFullYear();
   return { season: seasons[nextIndex], year };
@@ -307,9 +349,18 @@ export const getUpcomingNextSeason = async (
     const response = await fetchAndCache<AniListSeasonalMedia>(
       `upcomingNextSeason:${season}:${year}:${page}:${perPage}`,
       UPCOMING_SEASON_QUERY,
-      { sort: ['POPULARITY_DESC'], isAdult: false, type: 'ANIME', season, seasonYear: year, page, perPage }
+      {
+        sort: ['POPULARITY_DESC'],
+        isAdult: false,
+        type: 'ANIME',
+        season,
+        seasonYear: year,
+        page,
+        perPage,
+      }
     );
-    const page_ = (response as unknown as { data: UpcomingSeasonalResponse }).data.Page;
+    const page_ = (response as unknown as { data: UpcomingSeasonalResponse })
+      .data.Page;
 
     return {
       currentPage: page_.pageInfo.currentPage,
@@ -320,9 +371,15 @@ export const getUpcomingNextSeason = async (
         id: item.id.toString(),
         malId: item.idMal,
         title: item.title,
-        coverImage: pickFirst(item.coverImage.extraLarge, item.coverImage.large, item.coverImage.medium),
+        coverImage: pickFirst(
+          item.coverImage.extraLarge,
+          item.coverImage.large,
+          item.coverImage.medium
+        ),
         color: item.coverImage.color,
-        studios: item.studios.edges.filter((edge) => edge.isMain).map((edge) => edge.node.name),
+        studios: item.studios.edges
+          .filter((edge) => edge.isMain)
+          .map((edge) => edge.node.name),
         season: item.season,
         year: item.seasonYear,
         genres: item.genres,
@@ -332,6 +389,12 @@ export const getUpcomingNextSeason = async (
     };
   } catch (error) {
     console.error(error);
-    return { hasNextPage: false, total: 0, lastPage: 0, currentPage: 0, results: [] };
+    return {
+      hasNextPage: false,
+      total: 0,
+      lastPage: 0,
+      currentPage: 0,
+      results: [],
+    };
   }
 };

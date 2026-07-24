@@ -28,12 +28,12 @@ function Footer() {
 
   return (
     <div>
-      <footer className='mt-10 bg-background'>
-        <div className='mx-auto w-full p-4 py-6 lg:max-w-[85%] lg:pb-3 lg:pt-8'>
+      <footer className='bg-background mt-10'>
+        <div className='mx-auto w-full p-4 py-6 lg:max-w-[85%] lg:pt-8 lg:pb-3'>
           <div className='lg:flex lg:justify-between'>
             <div className='mb-6 lg:mb-0'>
               <Link href='/' className='flex w-fit items-center'>
-                <p className='self-center whitespace-nowrap text-3xl font-medium'>
+                <p className='self-center text-3xl font-medium whitespace-nowrap'>
                   Elyzen
                 </p>
               </Link>
@@ -109,7 +109,7 @@ function Footer() {
             <Link
               href='https://github.com/codeblitz97/elyzen'
               target='_blank'
-              className='ms-5 hover:text-gray-900 dark:hover:text-white lg:ms-0'
+              className='ms-5 hover:text-gray-900 lg:ms-0 dark:hover:text-white'
             >
               <GithubIcon />
               <span className='sr-only'>GitHub</span>

@@ -62,7 +62,7 @@ export const ImageZoom = ({ src, alt }: { src: string; alt: string }) => {
       <AnimatePresence>
         {isZoomed && (
           <motion.div
-            className='fixed inset-0 z-[9372374] flex items-center justify-center bg-black bg-opacity-75'
+            className='bg-opacity-75 fixed inset-0 z-[9372374] flex items-center justify-center bg-black'
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -85,11 +85,11 @@ export const ImageZoom = ({ src, alt }: { src: string; alt: string }) => {
               />
               <div className='flex gap-1'>
                 <XIcon
-                  className='absolute right-2 top-2 z-[9372371] h-8 w-8 cursor-pointer text-white'
+                  className='absolute top-2 right-2 z-[9372371] h-8 w-8 cursor-pointer text-white'
                   onClick={handleZoom}
                 />
                 <Download
-                  className='absolute right-10 top-2 z-[9372371] h-8 w-8 cursor-pointer text-white'
+                  className='absolute top-2 right-10 z-[9372371] h-8 w-8 cursor-pointer text-white'
                   onClick={handleDownload}
                 />
               </div>

@@ -8,7 +8,7 @@ import {
   CarouselContent,
   CarouselItem,
   CarouselNext,
-  CarouselPrevious
+  CarouselPrevious,
 } from '../ui/carousel';
 
 export const CharacterAnimeSlider = ({
@@ -33,7 +33,7 @@ export const CharacterAnimeSlider = ({
               <Image
                 isBlurred
                 radius='sm'
-                className='max-h-[185px] min-h-[185px] min-w-[125px] max-w-[125px] object-cover md:max-h-[265px] md:min-h-[265px] md:min-w-[185px] md:max-w-[185px] lg:max-h-[265px] lg:min-h-[265px] lg:min-w-[185px] lg:max-w-[185px] xl:max-h-[265px] xl:min-h-[265px] xl:min-w-[185px] xl:max-w-[185px]'
+                className='max-h-[185px] min-h-[185px] max-w-[125px] min-w-[125px] object-cover md:max-h-[265px] md:min-h-[265px] md:max-w-[185px] md:min-w-[185px] lg:max-h-[265px] lg:min-h-[265px] lg:max-w-[185px] lg:min-w-[185px] xl:max-h-[265px] xl:min-h-[265px] xl:max-w-[185px] xl:min-w-[185px]'
                 src={
                   anime.node.coverImage.extraLarge ??
                   anime.node.coverImage.large! ??
@@ -41,7 +41,7 @@ export const CharacterAnimeSlider = ({
                 }
                 alt={anime.node.title.romaji!}
               />
-              <div className='line-clamp-1 min-w-[125px] max-w-[125px] md:min-w-[185px] md:max-w-[185px] lg:min-w-[185px] lg:max-w-[185px] xl:max-h-[265px] xl:min-w-[185px] xl:max-w-[185px]'>
+              <div className='line-clamp-1 max-w-[125px] min-w-[125px] md:max-w-[185px] md:min-w-[185px] lg:max-w-[185px] lg:min-w-[185px] xl:max-h-[265px] xl:max-w-[185px] xl:min-w-[185px]'>
                 {anime.node.title.english ?? anime.node.title.romaji}
               </div>
             </Link>

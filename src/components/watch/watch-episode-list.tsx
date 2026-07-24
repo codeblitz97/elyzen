@@ -209,8 +209,8 @@ const EpisodeCard: React.FC<
         }}
         className={
           isWatching
-            ? 'mb-4 flex cursor-no-drop flex-col rounded border bg-gray-100 p-4 duration-300 dark:bg-gray-700/55 md:flex-row lg:flex-row xl:flex-row 2xl:flex-row'
-            : 'mb-4 flex cursor-pointer flex-col rounded border p-4 duration-300 hover:bg-gray-100 dark:hover:bg-gray-700/55 md:flex-row lg:flex-row xl:flex-row 2xl:flex-row'
+            ? 'mb-4 flex cursor-no-drop flex-col rounded border bg-gray-100 p-4 duration-300 md:flex-row lg:flex-row xl:flex-row 2xl:flex-row dark:bg-gray-700/55'
+            : 'mb-4 flex cursor-pointer flex-col rounded border p-4 duration-300 hover:bg-gray-100 md:flex-row lg:flex-row xl:flex-row 2xl:flex-row dark:hover:bg-gray-700/55'
         }
       >
         <Image
@@ -231,7 +231,7 @@ const EpisodeCard: React.FC<
           alt={episode.title ? episode.title : `Episode ${episode.number}`}
           width={1600}
           height={1600}
-          className='mr-4 aspect-video object-cover lg:max-h-[100px] lg:min-h-[100px] lg:min-w-[150px] lg:max-w-[150px]'
+          className='mr-4 aspect-video object-cover lg:max-h-[100px] lg:min-h-[100px] lg:max-w-[150px] lg:min-w-[150px]'
         />
         <div className='flex flex-col justify-center'>
           <h2 className='line-clamp-1 text-sm font-bold'>

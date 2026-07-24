@@ -29,7 +29,7 @@ export default function CasualCard({ anime }: { anime: ConsumetAnime }) {
             height={400}
             isBlurred
             width={300}
-            className='max-h-[285px] min-h-[285px] min-w-[220px] max-w-[220px] object-cover'
+            className='max-h-[285px] min-h-[285px] max-w-[220px] min-w-[220px] object-cover'
           />
         </motion.div>
         {isHovered && (
@@ -70,7 +70,7 @@ export default function CasualCard({ anime }: { anime: ConsumetAnime }) {
         <h1 className='max-w-[220px] truncate font-semibold'>
           {anime.title.english ?? anime.title.romaji ?? anime.title.native}
         </h1>
-        <div className='flex w-full items-start gap-2 text-sm font-semibold text-gray-700 dark:text-gray-400 md:justify-between'>
+        <div className='flex w-full items-start gap-2 text-sm font-semibold text-gray-700 md:justify-between dark:text-gray-400'>
           <h1 className='flex gap-1 self-start'>
             <span className='hidden md:inline lg:inline xl:inline 2xl:inline'>
               Total Episodes:

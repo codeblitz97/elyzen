@@ -1,6 +1,6 @@
-import ky from "ky";
+import ky from 'ky';
 
-const GRAPHQL_ENDPOINT = "https://api.kuroji.xyz/graphql";
+const GRAPHQL_ENDPOINT = 'https://api.kuroji.xyz/graphql';
 
 export interface Artwork {
   height: number;
@@ -205,19 +205,19 @@ export async function getInfo(id: number): Promise<Media> {
         variables: { id },
       },
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     })
     .json<GraphQLResponse<{ media: Media }>>();
 
   if (response.errors && response.errors.length > 0) {
     throw new Error(
-      `GraphQL error: ${response.errors.map((e) => e.message).join(", ")}`
+      `GraphQL error: ${response.errors.map((e) => e.message).join(', ')}`
     );
   }
 
   if (!response.data) {
-    throw new Error("GraphQL response contained no data");
+    throw new Error('GraphQL response contained no data');
   }
 
   return response.data.media;

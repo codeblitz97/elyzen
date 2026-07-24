@@ -167,4 +167,3 @@ export function ScreenshotButton({ tooltipPlacement }: MediaButtonProps) {
     </Tooltip.Root>
   );
 }
-

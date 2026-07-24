@@ -1,7 +1,9 @@
-import { Button } from "@heroui/react"
+import { Button } from '@heroui/react';
 
 export default function Home() {
-  return <div>
-    <Button>Hii</Button>
-  </div>
+  return (
+    <div>
+      <Button>Hii</Button>
+    </div>
+  );
 }

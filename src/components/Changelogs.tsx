@@ -133,7 +133,7 @@ export default function Changelogs() {
                       </p>
                     </div>
                     <div className='my-3 flex flex-col items-center justify-evenly'>
-                      <p className='font-inter mx-2 whitespace-nowrap font-medium'>
+                      <p className='font-inter mx-2 font-medium whitespace-nowrap'>
                         Version - {latestRelease.tag_name}
                       </p>
                       <div className='mt-1 h-[1px] w-full bg-white/10' />

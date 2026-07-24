@@ -258,7 +258,7 @@ const EpisodeCard: React.FC<EpisodeCardProps> = ({
   return (
     <a
       href={`/watch/${id}?episodeId=${encodeURIComponent(episodeId!)}&provider=${provider}&type=${type}&number=${episode.number}`}
-      className='mb-4 flex flex-col rounded border p-4 duration-300 hover:bg-gray-100 dark:hover:bg-gray-700/55 md:flex-row lg:flex-row xl:flex-row 2xl:flex-row'
+      className='mb-4 flex flex-col rounded border p-4 duration-300 hover:bg-gray-100 md:flex-row lg:flex-row xl:flex-row 2xl:flex-row dark:hover:bg-gray-700/55'
     >
       <Image
         src={
@@ -269,7 +269,7 @@ const EpisodeCard: React.FC<EpisodeCardProps> = ({
               : info.coverImage!
         }
         alt={episode.title ? episode.title : `Episode ${episode.number}`}
-        className='mr-6 h-full w-full object-cover md:max-h-[165px] md:min-h-[165px] md:min-w-[295px] md:max-w-[295px] lg:max-h-[165px] lg:min-h-[165px] lg:min-w-[295px] lg:max-w-[295px]'
+        className='mr-6 h-full w-full object-cover md:max-h-[165px] md:min-h-[165px] md:max-w-[295px] md:min-w-[295px] lg:max-h-[165px] lg:min-h-[165px] lg:max-w-[295px] lg:min-w-[295px]'
       />
       <div className='flex flex-col justify-center'>
         <h2 className='text-xl font-bold'>

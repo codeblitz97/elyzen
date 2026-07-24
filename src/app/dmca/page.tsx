@@ -9,7 +9,7 @@ const DMCA = () => {
       </div>
       <div className='mx-auto max-w-2xl px-4 py-20'>
         <h1 className='mb-4 text-4xl font-bold'>DMCA NOTE</h1>
-        <p className='mb-56 text-lg text-primary-200'>
+        <p className='text-primary-200 mb-56 text-lg'>
           Elyzen operates independently and is not formally associated with nor
           endorsed by any of the anime studios responsible for the creation of
           the anime featured on this platform. Our website serves solely as a
