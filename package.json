@@ -37,7 +37,7 @@
     "ky": "^2.0.2",
     "locomotive-scroll": "^4.1.4",
     "lodash": "^4.17.21",
-    "lucide-react": "^0.407.0",
+    "lucide-react": "^1.26.0",
     "marked": "^14.0.0",
     "media-icons": "^1.1.4",
     "mongodb": "^6.7.0",
