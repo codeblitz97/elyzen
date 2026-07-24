@@ -1,8 +1,6 @@
 'use client';
-import React from 'react';
 import Link from 'next/link';
 import { GithubIcon } from 'lucide-react';
-import { DiscordLogoIcon } from '@radix-ui/react-icons';
 
 function Footer() {
   const year = new Date().getFullYear();
