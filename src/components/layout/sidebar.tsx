@@ -1,4 +1,4 @@
-"use client"
+'use client';
 
 import {
   Sidebar,
@@ -11,36 +11,36 @@ import {
   useSidebar,
   SidebarFooter,
   SidebarTrigger,
-} from "@/components/ui/sidebar"
-import { Tooltip, TooltipTrigger, TooltipContent } from "../ui/tooltip"
-import { Compass, Home, LucideIcon } from "lucide-react"
+} from '@/components/ui/sidebar';
+import { Tooltip, TooltipTrigger, TooltipContent } from '../ui/tooltip';
+import { Compass, Home, LucideIcon } from 'lucide-react';
 
-import { useRouter } from "next/navigation"
+import { useRouter } from 'next/navigation';
 
 function SidebarTitle() {
-  const { state } = useSidebar()
+  const { state } = useSidebar();
 
-  const collapsed = state === "collapsed"
+  const collapsed = state === 'collapsed';
 
   return (
-    <div className="flex justify-between items-center gap-2 p-0">
+    <div className='flex items-center justify-between gap-2 p-0'>
       {!collapsed ? (
         <>
-          <span className="font-semibold whitespace-nowrap text-xl justify-between px-2">
+          <span className='justify-between px-2 text-xl font-semibold whitespace-nowrap'>
             Elyzen
           </span>
-          <SidebarTrigger className="p-4 hover:bg-sidebar-accent!" />
+          <SidebarTrigger className='hover:bg-sidebar-accent! p-4' />
         </>
       ) : (
         <>
-          <span className="block font-semibold whitespace-nowrap text-xl justify-between px-2 sm:hidden">
+          <span className='block justify-between px-2 text-xl font-semibold whitespace-nowrap sm:hidden'>
             Elyzen
           </span>
-          <SidebarTrigger className="p-4 hover:bg-sidebar-accent!" />
+          <SidebarTrigger className='hover:bg-sidebar-accent! p-4' />
         </>
-      ) }
+      )}
     </div>
-  )
+  );
 }
 
 type SidebarItem = {
@@ -51,30 +51,30 @@ type SidebarItem = {
 
 const ITEMS: SidebarItem[] = [
   {
-    name: "Home",
+    name: 'Home',
     icon: Home,
-    path: '/'
+    path: '/',
   },
   {
-    name: "Discover",
+    name: 'Discover',
     icon: Compass,
-    path: "/discover"
-  }
-]
+    path: '/discover',
+  },
+];
 
 export default function AppSidebar() {
   const router = useRouter();
   const { open } = useSidebar();
 
   return (
-    <Sidebar collapsible="icon">
-      <SidebarContent className="overflow-x-hidden">
+    <Sidebar collapsible='icon'>
+      <SidebarContent className='overflow-x-hidden'>
         <SidebarHeader>
           <SidebarTitle />
         </SidebarHeader>
 
         <SidebarGroup>
-          <SidebarMenu className="gap-1">
+          <SidebarMenu className='gap-1'>
             {ITEMS.map((item) => {
               const Icon = item.icon;
 
@@ -82,7 +82,7 @@ export default function AppSidebar() {
                 return (
                   <SidebarMenuItem key={item.name}>
                     <SidebarMenuButton onClick={() => router.push(item.path)}>
-                      <Icon className="size-4" />
+                      <Icon className='size-4' />
                       <span>{item.name}</span>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
@@ -94,20 +94,22 @@ export default function AppSidebar() {
                   <TooltipTrigger
                     render={
                       <SidebarMenuItem>
-                        <SidebarMenuButton onClick={() => router.push(item.path)}>
-                          <Icon className="size-4" />
+                        <SidebarMenuButton
+                          onClick={() => router.push(item.path)}
+                        >
+                          <Icon className='size-4' />
                           <span>{item.name}</span>
                         </SidebarMenuButton>
                       </SidebarMenuItem>
                     }
                   />
-                  <TooltipContent side="right">
+                  <TooltipContent side='right'>
                     <p>{item.name}</p>
                   </TooltipContent>
                 </Tooltip>
               );
             })}
-          </SidebarMenu>  
+          </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
       {/* <SidebarFooter>
@@ -127,5 +129,5 @@ export default function AppSidebar() {
         </SidebarMenu>
       </SidebarFooter> */}
     </Sidebar>
-  )
+  );
 }

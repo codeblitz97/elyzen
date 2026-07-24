@@ -18,7 +18,6 @@ interface KurojiPoster {
   large: string | null;
 }
 
-
 interface KurojiGenre {
   id: string;
   name: string;
@@ -45,6 +44,17 @@ interface KurojiVideo {
   source: string | null;
 }
 
+interface KurojiArtwork {
+  large: string | null;
+  medium: string | null;
+  type: string | null;
+  width: number | null;
+  url: string;
+  height: number | null;
+  source: string | null;
+  iso_639_1: string | null;
+}
+
 interface KurojiMedia {
   id: number;
   id_mal: number | null;
@@ -55,6 +65,7 @@ interface KurojiMedia {
   format: string | null;
   background: string | null;
   poster: KurojiPoster;
+  artworks: KurojiArtwork[];
   episodes_total: number | null;
   episodes_aired: number | null;
   score: number | null;
@@ -98,6 +109,36 @@ const EMPTY_RETURN: ReturnData = {
   results: [],
 };
 
+function getBestImage(
+  logos: KurojiArtwork[],
+  language_iso: 'en' | 'jp' | null = null,
+  dimension: { width: number; height: number } | 'smallest' = 'smallest'
+): KurojiArtwork | null {
+  const filtered = logos.filter((l) => l.iso_639_1 === language_iso);
+
+  if (filtered.length === 0) return null;
+
+  if (dimension === 'smallest') {
+    return filtered.reduce((smallest, current) => {
+      const smallestArea =
+        (smallest.width as number) * (smallest.height as number);
+      const currentArea =
+        (current.width as number) * (current.height as number);
+      return currentArea < smallestArea ? current : smallest;
+    });
+  } else {
+    return filtered.reduce((closest, current) => {
+      const currentDiff =
+        Math.abs((current.width as number) - dimension.width) +
+        Math.abs((current.height as number) - dimension.height);
+      const closestDiff =
+        Math.abs((closest.width as number) - dimension.width) +
+        Math.abs((closest.height as number) - dimension.height);
+      return currentDiff < closestDiff ? current : closest;
+    });
+  }
+}
+
 const fetchAndCache = async <TItem>(
   cacheId: string,
   query: string,
@@ -135,6 +176,7 @@ const MEDIA_FRAGMENT = `
   videos(type: "trailer") { url type source }
   description format background
   poster { small medium large }
+  artworks { large medium type width url height source iso_639_1 }
   episodes_total episodes_aired score duration season season_year
   next_airing_episode { episode airing_at }
   studios(only_main: true) { is_main studio { id name } }
@@ -209,16 +251,25 @@ const mapMediaItem = (item: KurojiMedia) => ({
     english: item.title.english,
     native: item.title.native,
   },
-  coverImage: pickFirst(item.poster.large, item.poster.medium, item.poster.small),
-  trailer: extractTrailer(item.videos ?? []),
-  description: item.description,
-  status: item.status,
-  bannerImage: pickFirst(
-    item.background,
+  coverImage: pickFirst(
     item.poster.large,
     item.poster.medium,
     item.poster.small
   ),
+  trailer: extractTrailer(item.videos ?? []),
+  description: item.description,
+  status: item.status,
+  bannerImage:
+    getBestImage(
+      item.artworks.filter(
+        (artwork) => artwork.type === 'background' && artwork.source === 'tmdb'
+      ),
+      null,
+      {
+        width: 3840,
+        height: 2180,
+      }
+    )?.large || item.background,
   rating: item.score,
   meanScore: item.score,
   releaseDate: item.season_year,
@@ -367,6 +418,7 @@ const UPCOMING_SEASON_QUERY = `query (
       country
       next_airing_episode { episode airing_at }
       poster { small medium large }
+      artworks { large medium type width url height source }
       id id_mal season season_year is_adult genres { id name } format color
       studios(only_main: true) { is_main studio { id name } }
     }

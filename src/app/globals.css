@@ -1,7 +1,12 @@
 @import 'tailwindcss';
 @import '@heroui/styles';
-@import "tw-animate-css";
-@import "shadcn/tailwind.css";
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+@import '@fontsource-variable/elms-sans';
+
+html {
+  font-family: 'Elms Sans Variable', sans-serif;
+}
 
 @theme {
   --color-sidebar: var(--sidebar);
@@ -114,7 +119,7 @@
   --chart-5: oklch(0.269 0 0);
   --sidebar: oklch(0.205 0 0);
   --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary: oklch(62.04% 0.195 152.78);
   --sidebar-primary-foreground: oklch(0.985 0 0);
   --sidebar-accent: oklch(0.269 0 0);
   --sidebar-accent-foreground: oklch(0.985 0 0);

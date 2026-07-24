@@ -1,16 +1,8 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
-import { Overpass, Inter } from 'next/font/google';
 import { Providers } from './providers';
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils';
 import AppSidebar from '@/components/layout/sidebar';
-
-const inter = Inter({subsets:['latin'],variable:'--font-sans'});
-
-const overPass = Overpass({
-  subsets: ['latin', 'latin-ext', 'cyrillic', 'cyrillic-ext', 'vietnamese'],
-  weight: ['200', '300', '400', '500', '600', '700', '800', '900'],
-});
 
 export const metadata: Metadata = {
   applicationName: 'Elyzen',
@@ -122,11 +114,10 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='en' data-theme="dark" suppressHydrationWarning className={cn("font-sans", inter.variable)}>
+    <html lang='en' data-theme='dark' suppressHydrationWarning>
       <body
         className={
-          'scrollbar h-full scrollbar-thumb-sky-700 scrollbar-track-sky-300 ' +
-          overPass.className
+          'scrollbar h-full scrollbar-thumb-sky-700 scrollbar-track-sky-300'
         }
       >
         <Providers>
