@@ -1,8 +1,3 @@
-import {
-  type AnimeData as MappingData,
-  convertMappingsToArray,
-  MappingItem,
-} from '@/types/anizip';
 import { cache } from './cache';
 
 interface Prms {
@@ -103,7 +98,6 @@ export interface AnilistInfo {
       }[]
     | null;
   type?: string | null;
-  mappings?: MappingItem[] | null;
   characters?: Character[] | null;
   recommendations?:
     | {
@@ -186,7 +180,6 @@ const defaultResponse: AnilistInfo = {
   season: null,
   studios: null,
   currentEpisode: null,
-  mappings: null,
   synonyms: null,
   countryOfOrigin: null,
   description: null,
@@ -584,7 +577,7 @@ export const fetchAnilistInfo = async (params: Prms): Promise<AnilistInfo> => {
         }
       }`;
 
-      const [mediaResponse, mappingsResponse] = await Promise.all([
+      const mediaResponse = await 
         fetch('https://graphql.anilist.co', {
           method: 'POST',
           headers: {
@@ -592,15 +585,12 @@ export const fetchAnilistInfo = async (params: Prms): Promise<AnilistInfo> => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({ query, variables: { id: Number(params.id) } }),
-        }),
-        fetch(`https://api.ani.zip/mappings?anilist_id=${params.id}`),
-      ]);
+        });
 
       const d = await mediaResponse.json();
       const { data } = d as MediaResponse;
       if (data) {
       }
-      const mappingsData = (await mappingsResponse.json()) as MappingData;
 
       const animeInfo = {
         id: params.id,
@@ -645,7 +635,7 @@ export const fetchAnilistInfo = async (params: Prms): Promise<AnilistInfo> => {
         totalEpisodes:
           data.Media?.episodes ?? data.Media.nextAiringEpisode?.episode - 1,
         currentEpisode:
-          data.Media?.nextAiringEpisode?.episode - 1 ?? data.Media?.episodes,
+          data.Media?.nextAiringEpisode?.episode - 1 || data.Media?.episodes,
         rating: data.Media?.averageScore,
         duration: data.Media?.duration,
         genres: data.Media?.genres,
@@ -657,7 +647,6 @@ export const fetchAnilistInfo = async (params: Prms): Promise<AnilistInfo> => {
           isMain: item.isMain,
         })),
         type: data.Media?.format,
-        mappings: convertMappingsToArray(mappingsData.mappings),
         characters: data.Media?.characters?.edges?.map(async (item) => ({
           id: item.node?.id,
           role: item.role,
