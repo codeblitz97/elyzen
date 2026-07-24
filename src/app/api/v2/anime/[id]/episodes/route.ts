@@ -1,6 +1,6 @@
 import ky, { KyInstance } from 'ky';
 import { formatDistanceToNow, parseISO } from 'date-fns';
-import { fetchAnilistInfo } from '@/lib/info';
+import { getInfo } from '@/lib/info';
 import { NextRequest, NextResponse } from 'next/server';
 import { cache } from '@/lib/cache';
 
@@ -291,12 +291,10 @@ export function getEpisodes(id: string, legacy?: true): Promise<EpisodeReturnTyp
 export function getEpisodes(id: string, legacy: false): Promise<UnifiedEpisode[]>;
 export async function getEpisodes(
   id: string,
-  legacy = true
 ): Promise<EpisodeReturnType[] | UnifiedEpisode[]> {
-  const anilistInfo = await fetchAnilistInfo({ id });
+  const anilistInfo = await getInfo(Number(id));
   const titles = [...new Set(Object.values(anilistInfo.title).filter((title) => title) as string[])];
 
-  // anizip metadata + provider search/episode-fetch chain, side by side 🏃‍♀️🏃
   const [anizipEpisodes, searches] = await Promise.all([
     getAnizipMetadata(id).catch(() => [] as AnizipEpisode[]),
     getAllProvidersSearch(titles),
