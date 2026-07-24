@@ -1,11 +1,8 @@
 import type { Metadata, Viewport } from 'next';
-// import './globals.css';
-import { ThemeProvider } from '@/components/theme-provider';
-import TopProgressBar from '@/components/TopProgressBar';
+import './globals.css';
 import { Overpass } from 'next/font/google';
 import { Providers } from './providers';
 import Footer from '@/components/Footer';
-import Changelogs from '@/components/Changelogs';
 
 const overPass = Overpass({
   subsets: ['latin', 'latin-ext', 'cyrillic', 'cyrillic-ext', 'vietnamese'],
@@ -129,18 +126,10 @@ export default async function RootLayout({
           overPass.className
         }
       >
-            <ThemeProvider
-              attribute='class'
-              defaultTheme='system'
-              enableSystem
-              disableTransitionOnChange
-            >
               <Providers>
                 <main>{children}</main>
                 <Footer />
               </Providers>
-            </ThemeProvider>
-          <TopProgressBar />
       </body>
     </html>
   );

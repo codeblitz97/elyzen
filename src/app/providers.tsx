@@ -1,7 +1,15 @@
 'use client';
 
-import { NextUIProvider } from '@nextui-org/react';
+import TopProgressBar from "@/components/progress-bar";
+import { ThemeProvider } from "@/components/theme-provider";
 
 export function Providers({ children }: { children: React.ReactNode }) {
-  return <NextUIProvider>{children}</NextUIProvider>;
+  return (
+    <>
+     <ThemeProvider>
+       <TopProgressBar/>
+      {children}
+     </ThemeProvider>
+    </>
+  )
 }
