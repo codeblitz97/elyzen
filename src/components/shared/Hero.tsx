@@ -5,7 +5,7 @@ import { Button } from '@nextui-org/react';
 import Image from 'next/image';
 import React from 'react';
 import { getRandomElement, numberToMonth } from '@/lib/utils';
-import RenderVideo from './Video';
+import RenderVideo from './video';
 import Link from 'next/link';
 
 export const Hero = ({ data }: { data: ReturnData }) => {

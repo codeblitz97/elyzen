@@ -2,8 +2,8 @@
 
 import { AnilistInfo, ICharacter } from '@/lib/info';
 import { Provider } from '@/types/api';
-import AnimeViewer from '../shared/EpisodeList';
-import { Card } from '../shared/Card';
+import AnimeViewer from '../shared/episode-list';
+import { Card } from '../shared/card';
 import { Tabs as UITabs, Tab, Image, Link } from '@nextui-org/react';
 import { SeasonalMedia } from '@/types/anime-data';
 import { motion, AnimatePresence } from 'framer-motion';

@@ -5,7 +5,7 @@ import { Image, Link, Tooltip } from '@nextui-org/react';
 import { motion } from 'framer-motion';
 import Badge from '../ui/badge';
 import { getBrightnessScore } from '@/lib/utils';
-import { getRatingIcon } from './Card';
+import { getRatingIcon } from './card';
 import { FaStar } from 'react-icons/fa';
 
 export const ColumnCard = ({

@@ -6,7 +6,7 @@ import {
   SeasonalMedia,
   UpcomingSeasonalReturnData,
 } from '@/types/anime-data';
-import { Card } from '../shared/Card';
+import { Card } from '../shared/card';
 import {
   Carousel,
   CarouselContent,

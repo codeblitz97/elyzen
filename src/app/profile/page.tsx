@@ -6,7 +6,7 @@ import { getRelativeTime } from '@/lib/utils';
 import dynamic from 'next/dynamic';
 import { getAnilistUser } from '@/lib/authenticated';
 
-const SideBar = dynamic(() => import('@/components/SideBar'), { ssr: false });
+const SideBar = dynamic(() => import('@/components/sidebar'), { ssr: false });
 
 export default function Profile() {
   const profile = use(getAuthSession());

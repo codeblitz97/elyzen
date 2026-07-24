@@ -17,7 +17,7 @@ import {
   Avatar,
 } from '@nextui-org/react';
 import { ConsumetSearchResult } from '@/types/consumet';
-import useDebounce from '@/hooks/useDebounce';
+import useDebounce from '@/hooks/use-debounce';
 import Image from 'next/image';
 import { AnilistUserResponse, getAnilistUser } from '@/lib/authenticated';
 import { signIn, signOut } from 'next-auth/react';

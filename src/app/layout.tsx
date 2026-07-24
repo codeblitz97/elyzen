@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { Overpass } from 'next/font/google';
 import { Providers } from './providers';
-import Footer from '@/components/Footer';
+import Footer from '@/components/footer';
 
 const overPass = Overpass({
   subsets: ['latin', 'latin-ext', 'cyrillic', 'cyrillic-ext', 'vietnamese'],

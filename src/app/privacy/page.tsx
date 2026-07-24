@@ -1,5 +1,5 @@
 import dynamic from 'next/dynamic';
-const SideBar = dynamic(() => import('@/components/SideBar'), { ssr: false });
+const SideBar = dynamic(() => import('@/components/sidebar'), { ssr: false });
 
 const PrivacyPolicy = () => {
   return (

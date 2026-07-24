@@ -15,7 +15,7 @@ import _, { List } from 'lodash';
 import { Input } from '../ui/input';
 import { AnilistInfo } from '@/lib/info';
 import { Image } from '@nextui-org/react';
-import useDeviceDetector from '@/hooks/useDeviceDetector';
+import useDeviceDetector from '@/hooks/use-device-detector';
 
 interface Props {
   animeData: Provider[];

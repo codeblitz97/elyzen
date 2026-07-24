@@ -6,8 +6,8 @@ import {
   TooltipContent,
   TooltipProvider,
 } from './ui/tooltip';
-import { ModeToggle } from './ThemeToggle';
-import useDeviceDetector from '@/hooks/useDeviceDetector';
+import { ModeToggle } from './theme-toggle';
+import useDeviceDetector from '@/hooks/use-device-detector';
 import { useEffect, useState } from 'react';
 import { Drawer, DrawerContent, DrawerTrigger } from './ui/drawer';
 import Link from 'next/link';
