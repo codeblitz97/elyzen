@@ -3,6 +3,7 @@ import { formatDistanceToNow, parseISO } from 'date-fns';
 import { getInfo } from '@/lib/info';
 import { NextRequest, NextResponse } from 'next/server';
 import { cache } from '@/lib/cache';
+import * as v from "valibot";
 
 const API_URL = "https://scrape-api-ten.vercel.app/api"
 
@@ -144,6 +145,10 @@ function similarityScore(a: string, b: string): number {
 
   return Math.max(0, Math.round(score));
 }
+
+const ParamsSchema = v.object({
+  id: v.pipe(v.string(), v.trim(), v.minLength(1, "Missing anime id!")),
+});
 
 const getAnizipMetadata = async (anilistId: string) => {
   const response = await ky.get(`https://api.ani.zip/mappings?anilist_id=${anilistId}`).json<{
@@ -341,40 +346,43 @@ export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const { id } = await params;
+  const rawParams = await params;
 
-  if (!id) {
+  const result = v.safeParse(ParamsSchema, rawParams);
+  if (!result.success) {
     return NextResponse.json(
-      { error: 'Missing anime id, silly!' },
+      { error: v.flatten(result.issues).nested?.id?.[0] ?? "Invalid anime id" },
       { status: 400 }
     );
   }
-  const cacheKey = `episodes:${id}`
+
+  const { id } = result.output;
+  const cacheKey = `episodes:${id}`;
 
   const cachedData = await cache.get(cacheKey);
-  
-  if (cachedData) return NextResponse.json(JSON.parse(cachedData), {
+
+  if (cachedData)
+    return NextResponse.json(JSON.parse(cachedData), {
       headers: {
-        'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400',
+        "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400",
       },
     });
 
   try {
     const episodes = await getEpisodes(id, false);
 
-    
-      await cache.set(cacheKey, JSON.stringify(episodes))
+    await cache.set(cacheKey, JSON.stringify(episodes));
 
     return NextResponse.json(episodes, {
       headers: {
-        'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400',
+        "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400",
       },
     });
   } catch (error) {
     console.error(`Failed to fetch episodes for ${id}:`, error);
 
     return NextResponse.json(
-      { error: 'Failed to fetch episodes, oopsie!' },
+      { error: "Failed to fetch episodes, oopsie!" },
       { status: 500 }
     );
   }

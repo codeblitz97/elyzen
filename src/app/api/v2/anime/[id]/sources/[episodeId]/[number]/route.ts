@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import ky, { type KyInstance, HTTPError } from "ky";
+import * as v from "valibot";
 
 const API_URL = "https://scrape-api-ten.vercel.app/api";
 
@@ -18,6 +19,26 @@ const providers: { name: string; client: KyInstance }[] = [
   { name: "watchanimeworld", client: watchanimeworld },
   { name: "anizone", client: anizone },
 ];
+
+const providerNames = providers.map((p) => p.name) as [string, ...string[]];
+
+// Validates route params (from the dynamic segments)
+const ParamsSchema = v.object({
+  id: v.pipe(v.string(), v.trim(), v.minLength(1, "id is required")),
+  episodeId: v.pipe(
+    v.string(),
+    v.trim(),
+    v.minLength(1, "episodeId is required")
+  ),
+  number: v.pipe(v.string(), v.trim(), v.minLength(1, "number is required")),
+});
+
+const QuerySchema = v.object({
+  provider: v.picklist(
+    providerNames,
+    `Invalid provider. Valid providers: ${providerNames.join(", ")}`
+  ),
+});
 
 interface Subtitle {
   url: string;
@@ -44,36 +65,37 @@ interface RouteParams {
 }
 
 export async function GET(request: NextRequest, { params }: RouteParams) {
-  const { id, episodeId, number } = await params;
+  const rawParams = await params;
   const { searchParams } = new URL(request.url);
-  const provider = searchParams.get("provider");
 
-  if (!provider) {
-    return NextResponse.json(
-      { error: "Missing required query param: provider" },
-      { status: 400 }
-    );
-  }
-
-  const providerEntry = providers.find((p) => p.name === provider);
-
-  if (!providerEntry) {
+  const paramsResult = v.safeParse(ParamsSchema, rawParams);
+  if (!paramsResult.success) {
     return NextResponse.json(
       {
-        error: `Invalid provider "${provider}". Valid providers: ${providers
-          .map((p) => p.name)
-          .join(", ")}`,
+        error: "Invalid route params",
+        issues: v.flatten(paramsResult.issues).nested,
       },
       { status: 400 }
     );
   }
 
-  if (!episodeId || !number) {
+  const queryResult = v.safeParse(QuerySchema, {
+    provider: searchParams.get("provider") ?? undefined,
+  });
+  if (!queryResult.success) {
     return NextResponse.json(
-      { error: "Missing required params: episodeId, number" },
+      {
+        error: "Invalid query params",
+        issues: v.flatten(queryResult.issues).nested,
+      },
       { status: 400 }
     );
   }
+
+  const { id, episodeId, number } = paramsResult.output;
+  const { provider } = queryResult.output;
+
+  const providerEntry = providers.find((p) => p.name === provider)!;
 
   try {
     const data = await providerEntry.client
