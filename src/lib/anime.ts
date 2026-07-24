@@ -145,7 +145,7 @@ const MEDIA_FRAGMENT = `
 `;
 
 const MEDIA_QUERY = `query (
-  $page: Int, $per_page: Int, $sort: [MediaSort], $type: MediaType,
+  $page: Int, $per_page: Int, $sort: [MediaSort!], $type: MediaType,
   $is_adult: Boolean = false, $format: MediaFormat, $season: MediaSeason,
   $season_year: Int, $search: String, $score_greater: Int, $status: MediaStatus,
   $genres_in: [String!]

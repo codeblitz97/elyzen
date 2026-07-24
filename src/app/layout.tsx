@@ -1,7 +1,11 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
-import { Overpass } from 'next/font/google';
+import { Overpass, Inter } from 'next/font/google';
 import { Providers } from './providers';
+import { cn } from "@/lib/utils";
+import AppSidebar from '@/components/layout/sidebar';
+
+const inter = Inter({subsets:['latin'],variable:'--font-sans'});
 
 const overPass = Overpass({
   subsets: ['latin', 'latin-ext', 'cyrillic', 'cyrillic-ext', 'vietnamese'],
@@ -118,7 +122,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='en' suppressHydrationWarning>
+    <html lang='en' data-theme="dark" suppressHydrationWarning className={cn("font-sans", inter.variable)}>
       <body
         className={
           'scrollbar h-full scrollbar-thumb-sky-700 scrollbar-track-sky-300 ' +
@@ -126,7 +130,8 @@ export default async function RootLayout({
         }
       >
         <Providers>
-          <main>{children}</main>
+          <AppSidebar />
+          <main className='w-full'>{children}</main>
         </Providers>
       </body>
     </html>
