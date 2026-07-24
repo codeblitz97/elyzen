@@ -7,10 +7,10 @@ export interface PageInfo {
 }
 
 export interface MediaTitle {
-  userPreferred: string;
-  romaji: string;
+  userPreferred: string | null;
+  romaji: string | null;
   english: string | null;
-  native: string;
+  native: string | null;
 }
 
 export interface Trailer {
@@ -26,16 +26,16 @@ export interface CoverImage {
   color: string | null;
 }
 
-export interface StartDate {
+export interface KurojiDate {
   year: number | null;
   month: number | null;
   day: number | null;
 }
 
 export interface NextAiringEpisode {
-  airingAt: number;
-  timeUntilAiring: number;
-  episode: number;
+  airingAt: number | null;
+  timeUntilAiring: number | null;
+  episode: number | null;
 }
 
 export interface Media {
@@ -67,8 +67,8 @@ export interface Media {
       };
     }[];
   };
-  startDate: StartDate;
-  endDate: StartDate | null;
+  startDate: KurojiDate;
+  endDate: KurojiDate | null;
 }
 
 export interface ResponseData {
@@ -80,27 +80,27 @@ export interface ResponseData {
 
 export interface Result {
   id: string;
-  malId: number;
+  malId: number | null;
   title: MediaTitle;
   coverImage: string | null;
   trailer: string | null;
-  description: string;
-  status: string;
+  description: string | null;
+  status: string | null;
   bannerImage: string | null;
   rating: number | null;
   meanScore: number | null;
-  releaseDate: number;
-  startDate: StartDate;
+  releaseDate: number | null;
+  startDate: KurojiDate | null;
   color: string | null;
   genres: string[];
-  totalEpisodes: number;
+  totalEpisodes: number | null;
   duration: number | null;
-  format: string;
-  type: string;
-  year: number;
-  season: string;
+  format: string | null;
+  type: string | null;
+  year: number | null;
+  season: string | null;
   nextAiringEpisode: NextAiringEpisode | null;
-  studios: string[];
+  studios: (string | null)[];
 }
 
 export interface ReturnData {
@@ -142,14 +142,14 @@ export interface UpcomingSeasonalResponse {
 
 export interface SeasonalMedia {
   id: string;
-  malId: number;
+  malId: number | null;
   title: MediaTitle;
   coverImage: string | null;
   color: string | null;
   genres: string[];
-  year: number;
-  season: string;
-  format: string;
+  year: number | null;
+  season: string | null;
+  format: string | null;
   nextAiringEpisode: NextAiringEpisode | null;
 }
 

@@ -1,83 +1,94 @@
 import { cache } from './cache';
 import {
+  KurojiDate,
   ReturnData,
-  UpcomingSeasonalResponse,
   UpcomingSeasonalReturnData,
 } from '@/types/anime-data';
 import { getCurrentSeason } from './utils';
 
-interface AniListTitle {
-  userPreferred: string;
-  romaji: string;
+interface KurojiTitle {
+  romaji: string | null;
   english: string | null;
-  native: string;
+  native: string | null;
 }
 
-interface AniListDate {
-  year: number | null;
-  month: number | null;
-  day: number | null;
-}
-
-interface AniListCoverImage {
-  extraLarge: string | null;
-  large: string | null;
+interface KurojiPoster {
+  small: string | null;
   medium: string | null;
-  color: string | null;
+  large: string | null;
 }
 
-interface AniListNextAiringEpisode {
-  airingAt: number;
-  timeUntilAiring: number;
-  episode: number;
+
+interface KurojiGenre {
+  id: string;
+  name: string;
 }
 
-interface AniListStudioEdge {
-  isMain: boolean;
-  node: { id: number; name: string; isAnimationStudio: boolean };
-}
-
-interface AniListMedia {
+interface KurojiStudio {
   id: number;
-  idMal: number;
-  status: string;
-  title: AniListTitle;
-  genres: string[];
-  trailer: { id: string; site: string; thumbnail: string } | null;
-  description: string;
-  format: string;
-  bannerImage: string | null;
-  coverImage: AniListCoverImage;
-  episodes: number | null;
-  meanScore: number | null;
+  name: string | null;
+}
+
+interface KurojiStudioConnection {
+  is_main: boolean | null;
+  studio: KurojiStudio;
+}
+
+interface KurojiAiringSchedule {
+  episode: number | null;
+  airing_at: number | null;
+}
+
+interface KurojiVideo {
+  url: string;
+  type: string | null;
+  source: string | null;
+}
+
+interface KurojiMedia {
+  id: number;
+  id_mal: number | null;
+  title: KurojiTitle;
+  genres: KurojiGenre[];
+  videos: KurojiVideo[];
+  description: string | null;
+  format: string | null;
+  background: string | null;
+  poster: KurojiPoster;
+  episodes_total: number | null;
+  episodes_aired: number | null;
+  score: number | null;
   duration: number | null;
-  season: string;
-  seasonYear: number;
-  averageScore: number | null;
-  nextAiringEpisode: AniListNextAiringEpisode | null;
-  studios: { edges: AniListStudioEdge[] };
-  type: string;
-  startDate: AniListDate;
-  endDate: AniListDate;
+  season: string | null;
+  season_year: number | null;
+  next_airing_episode: KurojiAiringSchedule | null;
+  studios: KurojiStudioConnection[];
+  type: string | null;
+  status: string | null;
+  color: string | null;
+  start_date: KurojiDate | null;
+  end_date: KurojiDate | null;
 }
 
-interface AniListPage<TItem> {
-  pageInfo: {
-    total: number;
-    perPage: number;
-    currentPage: number;
-    lastPage: number;
-    hasNextPage: boolean;
-  };
-  media: TItem[];
+interface KurojiPageInfo {
+  total: number;
+  per_page: number;
+  current_page: number;
+  last_page: number;
+  has_next_page: boolean;
 }
 
-interface AniListResponse<TItem> {
-  data: { Page: AniListPage<TItem> };
+interface KurojiMediaPage<TItem> {
+  data: TItem[];
+  page_info: KurojiPageInfo;
+}
+
+interface KurojiResponse<TItem> {
+  data: { media_page: KurojiMediaPage<TItem> };
   errors?: unknown;
 }
 
-const ANILIST_URL = 'https://graphql.anilist.co';
+const KUROJI_URL = 'https://api.kuroji.xyz/graphql';
 
 const EMPTY_RETURN: ReturnData = {
   hasNextPage: false,
@@ -91,17 +102,17 @@ const fetchAndCache = async <TItem>(
   cacheId: string,
   query: string,
   variables: Record<string, unknown>
-): Promise<AniListResponse<TItem>> => {
-  const cacheKey = `${ANILIST_URL}:${cacheId}`;
+): Promise<KurojiResponse<TItem>> => {
+  const cacheKey = `${KUROJI_URL}:${cacheId}`;
   const cached = await cache.get(cacheKey);
 
   if (cached) {
-    const parsed = JSON.parse(cached) as AniListResponse<TItem>;
+    const parsed = JSON.parse(cached) as KurojiResponse<TItem>;
     if (!parsed.errors) return parsed;
     await cache.del(cacheKey);
   }
 
-  const response = await fetch(ANILIST_URL, {
+  const response = await fetch(KUROJI_URL, {
     method: 'POST',
     headers: new Headers({
       'Content-Type': 'application/json',
@@ -110,7 +121,7 @@ const fetchAndCache = async <TItem>(
     body: JSON.stringify({ query, variables }),
     cache: 'no-store',
   });
-  const data = (await response.json()) as AniListResponse<TItem>;
+  const data = (await response.json()) as KurojiResponse<TItem>;
 
   if (!data.errors)
     await cache.set(cacheKey, JSON.stringify(data), 5 * 60 * 60);
@@ -118,33 +129,35 @@ const fetchAndCache = async <TItem>(
 };
 
 const MEDIA_FRAGMENT = `
-  id idMal status(version: 2)
-  title { userPreferred romaji english native }
-  genres
-  trailer { id site thumbnail }
-  description format bannerImage
-  coverImage { extraLarge large medium color }
-  episodes meanScore duration season seasonYear averageScore
-  nextAiringEpisode { airingAt timeUntilAiring episode }
-  studios { edges { isMain node { id name isAnimationStudio } } }
+  id id_mal status
+  title { romaji english native }
+  genres { id name }
+  videos(type: "trailer") { url type source }
+  description format background
+  poster { small medium large }
+  episodes_total episodes_aired score duration season season_year
+  next_airing_episode { episode airing_at }
+  studios(only_main: true) { is_main studio { id name } }
   type
-  startDate { year month day }
-  endDate { year month day }
+  color
+  start_date { year month day }
+  end_date { year month day }
 `;
 
 const MEDIA_QUERY = `query (
-  $page: Int, $size: Int, $sort: [MediaSort], $type: MediaType,
-  $isAdult: Boolean = false, $format: MediaFormat, $season: MediaSeason,
-  $seasonYear: Int, $search: String, $rating: Int, $status: MediaStatus,
-  $genres: [String]
+  $page: Int, $per_page: Int, $sort: [MediaSort], $type: MediaType,
+  $is_adult: Boolean = false, $format: MediaFormat, $season: MediaSeason,
+  $season_year: Int, $search: String, $score_greater: Int, $status: MediaStatus,
+  $genres_in: [String!]
 ) {
-  Page(page: $page, perPage: $size) {
-    pageInfo { total perPage currentPage lastPage hasNextPage }
-    media(
-      isAdult: $isAdult, sort: $sort, type: $type, format: $format,
-      season: $season, seasonYear: $seasonYear, search: $search,
-      averageScore_greater: $rating, status: $status, genre_in: $genres
-    ) { ${MEDIA_FRAGMENT} }
+  media_page(
+    page: $page, per_page: $per_page, sort: $sort, type: $type,
+    is_adult: $is_adult, format: $format, season: $season,
+    season_year: $season_year, search: $search,
+    score_greater: $score_greater, status: $status, genres_in: $genres_in
+  ) {
+    data { ${MEDIA_FRAGMENT} }
+    page_info { total per_page current_page last_page has_next_page }
   }
 }`;
 
@@ -152,58 +165,86 @@ const pickFirst = (...sources: (string | null | undefined)[]): string | null =>
   sources.find((src) => !!src) ?? null;
 
 const computeTotalEpisodes = (
-  episodes: number | null,
-  nextAiringEpisode: AniListNextAiringEpisode | null
+  episodesTotal: number | null,
+  episodesAired: number | null,
+  nextAiringEpisode: KurojiAiringSchedule | null
 ): number => {
-  if (typeof episodes === 'number' && !Number.isNaN(episodes)) return episodes;
+  if (typeof episodesTotal === 'number' && !Number.isNaN(episodesTotal))
+    return episodesTotal;
+  if (typeof episodesAired === 'number' && !Number.isNaN(episodesAired))
+    return episodesAired;
   if (nextAiringEpisode?.episode) return nextAiringEpisode.episode - 1;
   return 0;
 };
 
-const mapMediaItem = (item: AniListMedia) => ({
+const extractTrailer = (videos: KurojiVideo[]): string | null => {
+  const trailer = videos.find(
+    (video) => video.type?.toLowerCase() === 'trailer'
+  );
+  return trailer?.url ?? null;
+};
+
+const toNextAiringEpisode = (schedule: KurojiAiringSchedule | null) => {
+  if (!schedule || schedule.airing_at == null) return null;
+  return {
+    airingAt: schedule.airing_at,
+    episode: schedule.episode,
+    timeUntilAiring: Math.max(
+      0,
+      schedule.airing_at - Math.floor(Date.now() / 1000)
+    ),
+  };
+};
+
+const mapMediaItem = (item: KurojiMedia) => ({
   id: item.id.toString(),
-  malId: item.idMal,
-  title: item.title,
-  coverImage: pickFirst(
-    item.coverImage.extraLarge,
-    item.coverImage.large,
-    item.coverImage.medium
-  ),
-  trailer: item.trailer?.id
-    ? `https://www.youtube.com/watch?v=${item.trailer.id}`
-    : null,
+  malId: item.id_mal,
+  title: {
+    userPreferred: pickFirst(
+      item.title.english,
+      item.title.romaji,
+      item.title.native
+    ),
+    romaji: item.title.romaji,
+    english: item.title.english,
+    native: item.title.native,
+  },
+  coverImage: pickFirst(item.poster.large, item.poster.medium, item.poster.small),
+  trailer: extractTrailer(item.videos ?? []),
   description: item.description,
   status: item.status,
   bannerImage: pickFirst(
-    item.bannerImage,
-    item.coverImage.extraLarge,
-    item.coverImage.large,
-    item.coverImage.medium
+    item.background,
+    item.poster.large,
+    item.poster.medium,
+    item.poster.small
   ),
-  rating: item.averageScore,
-  meanScore: item.meanScore,
-  releaseDate: item.seasonYear,
-  startDate: item.startDate,
-  color: item.coverImage.color,
-  genres: item.genres,
-  totalEpisodes: computeTotalEpisodes(item.episodes, item.nextAiringEpisode),
+  rating: item.score,
+  meanScore: item.score,
+  releaseDate: item.season_year,
+  startDate: item.start_date,
+  color: item.color,
+  genres: (item.genres ?? []).map((genre) => genre.name),
+  totalEpisodes: computeTotalEpisodes(
+    item.episodes_total,
+    item.episodes_aired,
+    item.next_airing_episode
+  ),
   duration: item.duration,
   format: item.format,
   type: item.type,
-  studios: item.studios.edges
-    .filter((edge) => edge.isMain)
-    .map((edge) => edge.node.name),
+  studios: (item.studios ?? []).map((edge) => edge.studio.name).filter(Boolean),
   season: item.season,
-  year: item.seasonYear,
-  nextAiringEpisode: item.nextAiringEpisode,
+  year: item.season_year,
+  nextAiringEpisode: toNextAiringEpisode(item.next_airing_episode),
 });
 
-const toReturnData = (page: AniListPage<AniListMedia>): ReturnData => ({
-  currentPage: page.pageInfo.currentPage,
-  hasNextPage: page.pageInfo.hasNextPage,
-  total: page.pageInfo.total,
-  lastPage: page.pageInfo.lastPage,
-  results: page.media
+const toReturnData = (page: KurojiMediaPage<KurojiMedia>): ReturnData => ({
+  currentPage: page.page_info.current_page,
+  hasNextPage: page.page_info.has_next_page,
+  total: page.page_info.total,
+  lastPage: page.page_info.last_page,
+  results: page.data
     .filter((item) => item.status !== 'NOT_YET_RELEASED')
     .map(mapMediaItem),
 });
@@ -213,12 +254,12 @@ const runMediaQuery = async (
   variables: Record<string, unknown>
 ): Promise<ReturnData> => {
   try {
-    const response = await fetchAndCache<AniListMedia>(
+    const response = await fetchAndCache<KurojiMedia>(
       cacheId,
       MEDIA_QUERY,
       variables
     );
-    return toReturnData(response.data.Page);
+    return toReturnData(response.data.media_page);
   } catch (error) {
     console.error(error);
     return EMPTY_RETURN;
@@ -228,7 +269,7 @@ const runMediaQuery = async (
 export const getTrendingAnime = (page = 1, perPage = 24): Promise<ReturnData> =>
   runMediaQuery(`trendingNow:${page}:${perPage}`, {
     page,
-    size: perPage,
+    per_page: perPage,
     sort: ['TRENDING_DESC', 'POPULARITY_DESC'],
     type: 'ANIME',
   });
@@ -236,7 +277,7 @@ export const getTrendingAnime = (page = 1, perPage = 24): Promise<ReturnData> =>
 export const getAllTimePopularAnime = (): Promise<ReturnData> =>
   runMediaQuery('allTimePopularAnime', {
     page: 1,
-    size: 35,
+    per_page: 35,
     sort: ['POPULARITY_DESC'],
     type: 'ANIME',
   });
@@ -244,7 +285,7 @@ export const getAllTimePopularAnime = (): Promise<ReturnData> =>
 export const getAllTimePopularMovies = (): Promise<ReturnData> =>
   runMediaQuery('allTimePopularMovies', {
     page: 1,
-    size: 35,
+    per_page: 35,
     sort: ['POPULARITY_DESC', 'SCORE_DESC'],
     format: 'MOVIE',
   });
@@ -252,17 +293,17 @@ export const getAllTimePopularMovies = (): Promise<ReturnData> =>
 export const getPopularThisSeasonAnime = (): Promise<ReturnData> =>
   runMediaQuery('popularThisSeasonAnime', {
     page: 1,
-    size: 35,
+    per_page: 35,
     sort: ['POPULARITY_DESC'],
     type: 'ANIME',
     season: getCurrentSeason().toUpperCase(),
-    seasonYear: new Date().getFullYear(),
+    season_year: new Date().getFullYear(),
   });
 
 export const top100Anime = (): Promise<ReturnData> =>
   runMediaQuery('top100Anime', {
     page: 1,
-    size: 10,
+    per_page: 10,
     sort: ['SCORE_DESC'],
     type: 'ANIME',
   });
@@ -284,48 +325,52 @@ export const advancedSearch = (
     `advancedSearch:${search}:${sort}:${rating}:${status}:${format}:${type}:${year}:${season}:${genres}:${page}:${perPage}`,
     {
       page,
-      size: perPage,
+      per_page: perPage,
       sort,
       search,
-      rating,
-      status,
-      format,
-      type,
-      seasonYear: year,
-      season,
-      genres,
+      score_greater: rating || undefined,
+      status: status || undefined,
+      format: format || undefined,
+      type: type || undefined,
+      season_year: year || undefined,
+      season: season || undefined,
+      genres_in: genres.length ? genres : undefined,
     }
   );
 
-interface AniListSeasonalMedia {
-  title: AniListTitle;
-  countryOfOrigin: string;
-  nextAiringEpisode: AniListNextAiringEpisode | null;
-  coverImage: AniListCoverImage;
+interface KurojiSeasonalMedia {
+  title: KurojiTitle;
+  country: string | null;
+  next_airing_episode: KurojiAiringSchedule | null;
+  poster: KurojiPoster;
   id: number;
-  idMal: number;
-  season: string;
-  seasonYear: number;
-  isAdult: boolean;
-  genres: string[];
-  format: string;
-  studios: { edges: AniListStudioEdge[] };
+  id_mal: number | null;
+  season: string | null;
+  season_year: number | null;
+  is_adult: boolean | null;
+  genres: KurojiGenre[];
+  format: string | null;
+  color: string | null;
+  studios: KurojiStudioConnection[];
 }
 
 const UPCOMING_SEASON_QUERY = `query (
-  $season: MediaSeason, $seasonYear: Int, $sort: [MediaSort],
-  $isAdult: Boolean, $type: MediaType, $page: Int, $perPage: Int
+  $season: MediaSeason, $season_year: Int, $sort: [MediaSort],
+  $is_adult: Boolean, $type: MediaType, $page: Int, $per_page: Int
 ) {
-  Page(page: $page, perPage: $perPage) {
-    media(season: $season, seasonYear: $seasonYear, sort: $sort, isAdult: $isAdult, type: $type) {
-      title { romaji english native userPreferred }
-      countryOfOrigin
-      nextAiringEpisode { airingAt episode id mediaId timeUntilAiring }
-      coverImage { extraLarge large medium color }
-      id idMal season seasonYear isAdult genres format
-      studios { edges { isMain node { id name isAnimationStudio } } }
+  media_page(
+    season: $season, season_year: $season_year, sort: $sort,
+    is_adult: $is_adult, type: $type, page: $page, per_page: $per_page
+  ) {
+    data {
+      title { romaji english native }
+      country
+      next_airing_episode { episode airing_at }
+      poster { small medium large }
+      id id_mal season season_year is_adult genres { id name } format color
+      studios(only_main: true) { is_main studio { id name } }
     }
-    pageInfo { currentPage hasNextPage lastPage perPage total }
+    page_info { current_page has_next_page last_page per_page total }
   }
 }`;
 
@@ -346,45 +391,57 @@ export const getUpcomingNextSeason = async (
 ): Promise<UpcomingSeasonalReturnData> => {
   try {
     const { season, year } = getNextSeasonAndYear();
-    const response = await fetchAndCache<AniListSeasonalMedia>(
+    const response = await fetchAndCache<KurojiSeasonalMedia>(
       `upcomingNextSeason:${season}:${year}:${page}:${perPage}`,
       UPCOMING_SEASON_QUERY,
       {
         sort: ['POPULARITY_DESC'],
-        isAdult: false,
+        is_adult: false,
         type: 'ANIME',
         season,
-        seasonYear: year,
+        season_year: year,
         page,
-        perPage,
+        per_page: perPage,
       }
     );
-    const page_ = (response as unknown as { data: UpcomingSeasonalResponse })
-      .data.Page;
+    const page_ = (
+      response as unknown as {
+        data: { media_page: KurojiMediaPage<KurojiSeasonalMedia> };
+      }
+    ).data.media_page;
 
     return {
-      currentPage: page_.pageInfo.currentPage,
-      hasNextPage: page_.pageInfo.hasNextPage,
-      total: page_.pageInfo.total,
-      lastPage: page_.pageInfo.lastPage,
-      results: page_.media.map((item) => ({
+      currentPage: page_.page_info.current_page,
+      hasNextPage: page_.page_info.has_next_page,
+      total: page_.page_info.total,
+      lastPage: page_.page_info.last_page,
+      results: page_.data.map((item) => ({
         id: item.id.toString(),
-        malId: item.idMal,
-        title: item.title,
+        malId: item.id_mal,
+        title: {
+          userPreferred: pickFirst(
+            item.title.english,
+            item.title.romaji,
+            item.title.native
+          ),
+          romaji: item.title.romaji,
+          english: item.title.english,
+          native: item.title.native,
+        },
         coverImage: pickFirst(
-          item.coverImage.extraLarge,
-          item.coverImage.large,
-          item.coverImage.medium
+          item.poster.large,
+          item.poster.medium,
+          item.poster.small
         ),
-        color: item.coverImage.color,
-        studios: item.studios.edges
-          .filter((edge) => edge.isMain)
-          .map((edge) => edge.node.name),
+        color: item.color,
+        studios: (item.studios ?? [])
+          .map((edge) => edge.studio.name)
+          .filter(Boolean),
         season: item.season,
-        year: item.seasonYear,
-        genres: item.genres,
+        year: item.season_year,
+        genres: (item.genres ?? []).map((genre) => genre.name),
         format: item.format,
-        nextAiringEpisode: item.nextAiringEpisode,
+        nextAiringEpisode: toNextAiringEpisode(item.next_airing_episode),
       })),
     };
   } catch (error) {
