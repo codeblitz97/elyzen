@@ -138,7 +138,6 @@ export default async function RootLayout({
               <Providers>
                 <main>{children}</main>
                 <Footer />
-                <Changelogs />
               </Providers>
             </ThemeProvider>
           <TopProgressBar />
