@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import './globals.css';
+// import './globals.css';
 import { ThemeProvider } from '@/components/theme-provider';
 import TopProgressBar from '@/components/TopProgressBar';
 import { Overpass } from 'next/font/google';
