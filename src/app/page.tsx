@@ -1,4 +1,7 @@
+import { Button } from "@heroui/react"
 
 export default function Home() {
-  return <div>Work in progress</div>
+  return <div>
+    <Button>Hii</Button>
+  </div>
 }

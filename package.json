@@ -23,6 +23,7 @@
     "@radix-ui/react-separator": "^1.0.3",
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-tooltip": "^1.0.7",
+    "@tailwindcss/postcss": "^4.3.3",
     "@vidstack/react": "^1.11.21",
     "aniwatch": "^2.4.1",
     "axios": "^1.6.8",
@@ -45,7 +46,7 @@
     "mongoose": "^8.4.3",
     "next": "^16.2.11",
     "next-auth": "^4.24.7",
-    "next-nprogress-bar": "^2.3.12",
+    "next-nprogress-bar": "^2.4.7",
     "next-themes": "^0.3.0",
     "node-cache": "^5.1.2",
     "react": "^19.2.8",
@@ -70,10 +71,10 @@
     "@types/react-dom": "^18",
     "eslint": "9.6.0",
     "eslint-config-next": "14.2.5",
-    "postcss": "^8",
+    "postcss": "^8.5.22",
     "prettier": "^3.2.5",
     "prettier-plugin-tailwindcss": "^0.6.0",
-    "tailwindcss": "4",
+    "tailwindcss": "^4.3.3",
     "typescript": "^5"
   }
 }
