@@ -15,7 +15,7 @@ import {
   SidebarGroupContent,
 } from '@/components/ui/sidebar';
 import { Tooltip, TooltipTrigger, TooltipContent } from '../ui/tooltip';
-import { Bookmark, Clock, Compass, Heart, Home, LucideIcon, Search, Settings } from 'lucide-react';
+import { Bookmark, Clock, Compass, Heart, Home, History, LucideIcon, Search, Settings } from 'lucide-react';
 
 import { useRouter } from 'next/navigation';
 import { AvatarDropdown } from './avatar-dropdown';
@@ -56,8 +56,13 @@ const LIB_ITEMS: SidebarItem[] = [
     path: '/favorites'
   },
   {
-    name: 'History',
+    name: 'Watch Later',
     icon: Clock,
+    path: '/watch-later'
+  },
+  {
+    name: 'History',
+    icon: History,
     path: '/history'
   }
 ]

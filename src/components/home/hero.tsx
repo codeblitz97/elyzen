@@ -25,7 +25,7 @@ export default function Hero({ trendingData }: { trendingData: ReturnData }) {
   };
 
   return (
-    <div className='text-foreground bg-background relative min-h-[70vh] w-full overflow-hidden'>
+    <div className='text-foreground bg-background relative min-h-[80vh] w-full overflow-hidden'>
       <AnimatePresence mode='popLayout'>
         <motion.div
           key={currentIndex}
@@ -50,7 +50,7 @@ export default function Hero({ trendingData }: { trendingData: ReturnData }) {
       <div className='from-background via-background/60 absolute inset-x-0 bottom-0 z-10 h-2/3 bg-linear-to-t to-transparent' />
       <div className='from-background via-background/60 absolute inset-y-0 left-0 z-10 w-full bg-linear-to-r to-transparent md:w-2/3' />
 
-      <div className='relative z-20 container mx-auto flex h-full min-h-[70vh] flex-col justify-end px-6 py-12 pb-24'>
+      <div className='relative z-20 container mx-auto flex h-full min-h-[80vh] flex-col justify-end px-6 py-12 pb-24'>
         <AnimatePresence mode='wait'>
           <motion.div
             key={currentIndex}
