@@ -9,11 +9,15 @@ interface HomePageType {
 }
 
 export default function HomePage({ trendingData }: HomePageType) {
-  console.log(trendingData.results)
+  console.log(trendingData.results);
   return (
     <>
       <Hero trendingData={trendingData} />
-      <AnimeCard anime={trendingData.results[0]} />
+      <section className='flex flex-wrap gap-2'>
+        {trendingData.results.map((anime) => (
+          <AnimeCard anime={anime} key={anime.id}/>
+        ))}
+      </section>
     </>
   );
 }

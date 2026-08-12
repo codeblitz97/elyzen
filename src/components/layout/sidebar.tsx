@@ -15,7 +15,17 @@ import {
   SidebarGroupContent,
 } from '@/components/ui/sidebar';
 import { Tooltip, TooltipTrigger, TooltipContent } from '../ui/tooltip';
-import { Bookmark, Clock, Compass, Heart, Home, History, LucideIcon, Search, Settings } from 'lucide-react';
+import {
+  Bookmark,
+  Clock,
+  Compass,
+  Heart,
+  Home,
+  History,
+  LucideIcon,
+  Search,
+  Settings,
+} from 'lucide-react';
 
 import { useRouter } from 'next/navigation';
 import { AvatarDropdown } from './avatar-dropdown';
@@ -40,32 +50,32 @@ const ITEMS: SidebarItem[] = [
   {
     name: 'Search',
     icon: Search,
-    path: '/search'
-  }
+    path: '/search',
+  },
 ];
 
 const LIB_ITEMS: SidebarItem[] = [
   {
     name: 'Liked',
     icon: Heart,
-    path: '/liked'
+    path: '/liked',
   },
   {
     name: 'Favorites',
     icon: Bookmark,
-    path: '/favorites'
+    path: '/favorites',
   },
   {
     name: 'Watch Later',
     icon: Clock,
-    path: '/watch-later'
+    path: '/watch-later',
   },
   {
     name: 'History',
     icon: History,
-    path: '/history'
-  }
-]
+    path: '/history',
+  },
+];
 
 export default function AppSidebar() {
   const router = useRouter();
@@ -74,8 +84,8 @@ export default function AppSidebar() {
   return (
     <Sidebar collapsible='icon'>
       <SidebarContent className='overflow-x-hidden'>
-        <SidebarHeader className='flex-row justify-between items-center'>
-          { open && <h1 className='ml-2 text-xl font-semibold'>Elyzen</h1> }
+        <SidebarHeader className='flex-row items-center justify-between'>
+          {open && <h1 className='ml-2 text-xl font-semibold'>Elyzen</h1>}
           <Tooltip>
             <TooltipTrigger
               render={
@@ -83,14 +93,14 @@ export default function AppSidebar() {
               }
               delay={1000}
             />
-            <TooltipContent side="right">
+            <TooltipContent side='right'>
               <span>Toggle Sidebar</span>
-              <div className="flex items-center gap-1 text-[10px] font-mono text-muted-foreground">
-                <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted/20 px-1.5 font-mono text-[10px] font-medium opacity-100">
+              <div className='text-muted-foreground flex items-center gap-1 font-mono text-[10px]'>
+                <kbd className='bg-muted/20 pointer-events-none inline-flex h-5 items-center gap-1 rounded border px-1.5 font-mono text-[10px] font-medium opacity-100 select-none'>
                   Ctrl
                 </kbd>
                 <span>+</span>
-                <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted/20 px-1.5 font-mono text-[10px] font-medium opacity-100">
+                <kbd className='bg-muted/20 pointer-events-none inline-flex h-5 items-center gap-1 rounded border px-1.5 font-mono text-[10px] font-medium opacity-100 select-none'>
                   .
                 </kbd>
               </div>
@@ -179,13 +189,11 @@ export default function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        <SidebarMenu className="gap-1">
-          { open ? (
+        <SidebarMenu className='gap-1'>
+          {open ? (
             <SidebarMenuItem>
-              <SidebarMenuButton
-                  onClick={() => router.push('/settings')}
-                >
-                <Settings className="size-4" />
+              <SidebarMenuButton onClick={() => router.push('/settings')}>
+                <Settings className='size-4' />
                 Settings
               </SidebarMenuButton>
             </SidebarMenuItem>
@@ -194,9 +202,7 @@ export default function AppSidebar() {
               <TooltipTrigger
                 render={
                   <SidebarMenuItem>
-                    <SidebarMenuButton
-                      onClick={() => router.push('/settings')}
-                    >
+                    <SidebarMenuButton onClick={() => router.push('/settings')}>
                       <Settings className='size-4' />
                       Settings
                     </SidebarMenuButton>

@@ -1,3 +1,5 @@
+import type { NextConfig } from 'next';
+
 // import withPWAInit from '@ducanh2912/next-pwa';
 
 // const withPWA = withPWAInit({
@@ -19,7 +21,7 @@
 //   },
 // });
 
-const nextConfig = {
+const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -62,6 +64,9 @@ const nextConfig = {
         protocol: 'https',
       },
     ],
+  },
+  experimental: {
+    viewTransition: true,
   },
 };
 
